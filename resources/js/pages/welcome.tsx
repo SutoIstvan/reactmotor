@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { Navbar } from '@/components/navbar/navbar';
 import { HeroSection } from '@/components/hero/hero-section';
-import { StatsSection } from '@/components/stats/stats-section';
+import { AboutSection } from '@/components/about/about-section';
 import { FeatureSection } from '@/components/features/feature-section';
 import { TestimonialsSection } from '@/components/testimonials/testimonials-section';
 import { CTASection } from '@/components/cta/cta-section';
@@ -10,16 +10,16 @@ import { Footer } from '@/components/footer/footer';
 export default function Welcome() {
     return (
         <>
-            <Head title="DataFlow | Real-Time Data Infrastructure for Modern Teams">
+            <Head title="Márka Motor | Motorkerékpár kereskedés és szerviz">
                 <meta
                     name="description"
-                    content="Process 2.4M+ events per second with 99.99% uptime. DataFlow is the unified platform for building, deploying, and scaling real-time data pipelines."
+                    content="Minőségi motorkerékpárok és autók, hitel- és biztosítási ügyintézés, szerviz és eredetiségvizsgálat egy helyen."
                 />
             </Head>
-            <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+            <main className="bg-background text-foreground relative min-h-screen overflow-x-hidden">
                 <Navbar />
                 <HeroSection />
-                {/* <StatsSection /> */}
+                <AboutSection />
                 <FeatureSection />
                 <TestimonialsSection />
                 <CTASection />

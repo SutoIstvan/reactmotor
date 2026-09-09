@@ -1,11 +1,17 @@
-"use client"
+'use client';
 
-import { useEffect, useRef, useState } from "react"
-import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { ArrowRight, Play } from "lucide-react"
-import { Link } from "@inertiajs/react"
-import { Button } from "@/components/ui/button"
-import { register } from "@/routes"
+import { useEffect, useRef, useState } from 'react';
+import {
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from 'framer-motion';
+import { ArrowRight, Play } from 'lucide-react';
+import { Link } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
+import { register } from '@/routes';
 
 // Magnetic floating stat card with parallax
 function FloatingStatCard({
@@ -16,56 +22,61 @@ function FloatingStatCard({
   color,
   delay,
 }: {
-  position: "top-left" | "bottom-right"
-  label: string
-  value: string
-  subtext: string
-  color: "teal" | "coral"
-  delay: number
+  position: 'top-left' | 'bottom-right';
+  label: string;
+  value: string;
+  subtext: string;
+  color: 'teal' | 'coral';
+  delay: number;
 }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
+  const cardRef = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-  const springConfig = { damping: 30, stiffness: 150 }
-  const x = useSpring(mouseX, springConfig)
-  const y = useSpring(mouseY, springConfig)
+  const springConfig = { damping: 30, stiffness: 150 };
+  const x = useSpring(mouseX, springConfig);
+  const y = useSpring(mouseY, springConfig);
 
   // Inverse parallax - cards drift opposite to cursor
-  const cardX = useTransform(x, [-200, 200], [15, -15])
-  const cardY = useTransform(y, [-200, 200], [10, -10])
+  const cardX = useTransform(x, [-200, 200], [15, -15]);
+  const cardY = useTransform(y, [-200, 200], [10, -10]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!cardRef.current) return
-      const rect = cardRef.current.getBoundingClientRect()
-      const centerX = rect.left + rect.width / 2
-      const centerY = rect.top + rect.height / 2
-      mouseX.set(e.clientX - centerX)
-      mouseY.set(e.clientY - centerY)
-    }
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      mouseX.set(e.clientX - centerX);
+      mouseY.set(e.clientY - centerY);
+    };
 
-    window.addEventListener("mousemove", handleMouseMove)
-    return () => window.removeEventListener("mousemove", handleMouseMove)
-  }, [mouseX, mouseY])
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY]);
 
   const positionClasses = {
-    "top-left": "top-10 -left-4 lg:left-0",
-    "bottom-right": "bottom-20 -right-4 lg:right-0",
-  }
+    'top-left': 'top-10 -left-4 lg:left-0',
+    'bottom-right': 'bottom-20 -right-4 lg:right-0',
+  };
 
   const colorClasses = {
-    teal: "text-teal",
-    coral: "text-coral",
-  }
+    teal: 'text-teal',
+    coral: 'text-coral',
+  };
 
   return (
     <motion.div
       ref={cardRef}
-      className={`absolute ${positionClasses[position]} bg-card/80 backdrop-blur-sm border border-border/50 rounded-xl p-4 shadow-lg shadow-foreground/5 z-20`}
-      initial={{ opacity: 0, x: position === "top-left" ? -30 : 30 }}
+      className={`absolute ${positionClasses[position]} bg-card/80 border-border/50 shadow-foreground/5 z-20 rounded-xl border p-4 shadow-lg backdrop-blur-sm`}
+      initial={{ opacity: 0, x: position === 'top-left' ? -30 : 30 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay, duration: 0.6, type: "spring", stiffness: 100 }}
+      transition={{
+        delay,
+        duration: 0.6,
+        type: 'spring',
+        stiffness: 100,
+      }}
       style={{ x: cardX, y: cardY }}
     >
       {/* Sine wave bobbing */}
@@ -74,52 +85,57 @@ function FloatingStatCard({
         transition={{
           duration: 4,
           repeat: Infinity,
-          ease: "easeInOut",
-          delay: position === "top-left" ? 0 : 0.5,
+          ease: 'easeInOut',
+          delay: position === 'top-left' ? 0 : 0.5,
         }}
       >
-        <div className="text-xs text-muted-foreground mb-1 font-medium tracking-wide uppercase">
+        <div className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
           {label}
         </div>
-        <div className={`text-2xl font-bold ${colorClasses[color]} tracking-tight`}>
+        <div
+          className={`text-2xl font-bold ${colorClasses[color]} tracking-tight`}
+        >
           {value}
         </div>
-        <div className="text-xs text-muted-foreground">{subtext}</div>
+        <div className="text-muted-foreground text-xs">{subtext}</div>
       </motion.div>
     </motion.div>
-  )
+  );
 }
 
-const heroBackgroundImage = "https://vexora-nextjs.vercel.app/images/hero/bg-1.png"
+const heroBackgroundImage =
+  'https://vexora-nextjs.vercel.app/images/hero/bg-1.png';
 // const heroBackgroundImage = "https://www.markamotor.hu/assets/images/banner-background.png"
 // const heroBackgroundImage = "bg.png"
 
 const heroSlides = [
-  "https://markamotor.hu/assets/images/banner_right_image3.png",
-  "https://markamotor.hu/assets/images/banner_right_image8.png",
-  "https://www.markamotor.hu/assets/images/banner_right_image9.png",
-]
+  'https://markamotor.hu/assets/images/banner_right_image3.png',
+  'https://markamotor.hu/assets/images/banner_right_image8.png',
+  'https://www.markamotor.hu/assets/images/banner_right_image9.png',
+];
 
 export function HeroSection() {
-  const [activeSlide, setActiveSlide] = useState(0)
-  const [slideDirection, setSlideDirection] = useState<"next" | "previous">("next")
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [slideDirection, setSlideDirection] = useState<'next' | 'previous'>(
+    'next',
+  );
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setSlideDirection("next")
-      setActiveSlide((current) => (current + 1) % heroSlides.length)
-    }, 5000)
+      setSlideDirection('next');
+      setActiveSlide((current) => (current + 1) % heroSlides.length);
+    }, 5000);
 
-    return () => window.clearInterval(interval)
-  }, [])
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
     <section
-      className="relative min-h-[700px] flex items-center overflow-hidden bg-background"
+      className="bg-background relative flex min-h-[700px] items-center overflow-hidden"
       style={{
         backgroundImage: `linear-gradient(to bottom, color-mix(in srgb, var(--background) 10%, transparent), color-mix(in srgb, var(--background) 55%, transparent)), url(${heroBackgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
       {/* Ultra-thin dotted grid with radial mask */}
@@ -130,24 +146,24 @@ export function HeroSection() {
             radial-gradient(ellipse at 50% 50%, transparent 0%, color-mix(in srgb, var(--background) 15%, transparent) 90%),
             radial-gradient(circle, color-mix(in srgb, var(--foreground) 8%, transparent) 0.5px, transparent 0.5px)
           `,
-          backgroundSize: "100% 100%, 40px 40px",
+          backgroundSize: '100% 100%, 40px 40px',
         }}
       />
 
       <div className="container mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-5 gap-12 lg:gap-8 items-center min-h-[700px] pt-24">
+        <div className="grid min-h-[700px] items-center gap-12 pt-24 lg:grid-cols-5 lg:gap-8">
           {/* Left content - 2 columns */}
-          <div className="lg:col-span-2 space-y-8 relative z-10">
+          <div className="relative z-10 space-y-8 lg:col-span-2">
             {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal/10 text-teal border border-teal/20 text-sm font-medium">
+              <span className="bg-teal/10 text-teal border-teal/20 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-teal" />
+                  <span className="bg-teal absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
+                  <span className="bg-teal relative inline-flex h-2 w-2 rounded-full" />
                 </span>
                 Üdvözöljük honlapunkon!
               </span>
@@ -155,47 +171,51 @@ export function HeroSection() {
 
             {/* Headline with tighter letter-spacing */}
             <motion.h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-[1.1] text-balance"
-              style={{ letterSpacing: "-0.05em" }}
+              className="text-foreground text-4xl leading-[1.1] font-bold text-balance md:text-5xl lg:text-6xl"
+              style={{ letterSpacing: '-0.05em' }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
             >
-              Találd meg a hozzád illő {" "}
+              Találd meg a hozzád illő{' '}
               <span className="relative inline-block">
                 {/* Gradient text with glow */}
                 <span
-                  className="relative z-10 bg-gradient-to-r from-teal to-red-400 bg-clip-text text-transparent"
+                  className="from-teal relative z-10 bg-gradient-to-r to-red-400 bg-clip-text text-transparent"
                   style={{
-                    textShadow: "0 0 40px hsl(0 72% 56% / 0.3)",
+                    textShadow:
+                      '0 0 40px hsl(0 72% 56% / 0.3)',
                   }}
                 >
                   motort!
                 </span>
                 {/* Underline highlight */}
                 <motion.span
-                  className="absolute bottom-1 left-0 h-3 w-full bg-gradient-to-r from-teal/20 to-red-400/20 -z-0 rounded-sm"
+                  className="from-teal/20 absolute bottom-1 left-0 -z-0 h-3 w-full rounded-sm bg-gradient-to-r to-red-400/20"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
                   transition={{ duration: 0.5, delay: 0.8 }}
                   style={{ originX: 0 }}
                 />
-              </span>{" "}
+              </span>{' '}
             </motion.h1>
 
             {/* Subheadline */}
             <motion.p
-              className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed"
+              className="text-muted-foreground max-w-xl text-lg leading-relaxed md:text-xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Vállalkozásunk használt nagy motorokkal, új robogókkal, teljes körű szerviz, műszaki és eredetiség vizsga, biztosítás, átírás lebonyolításával várja ügyfeleit!
+              Vállalkozásunk használt nagy motorokkal, új
+              robogókkal, teljes körű szerviz, műszaki és
+              eredetiség vizsga, biztosítás, átírás
+              lebonyolításával várja ügyfeleit!
             </motion.p>
 
             {/* CTAs */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-4"
+              className="flex flex-col gap-4 sm:flex-row"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
@@ -203,7 +223,7 @@ export function HeroSection() {
               <Button
                 asChild
                 size="lg"
-                className="bg-foreground text-background hover:bg-foreground/90 group px-8 shadow-lg shadow-foreground/10 transition-all hover:shadow-xl hover:shadow-foreground/15"
+                className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 px-8 shadow-lg transition-all hover:shadow-xl"
               >
                 <Link href={register()}>
                   Részletek
@@ -214,7 +234,7 @@ export function HeroSection() {
                 size="lg"
                 variant="outline"
                 asChild
-                className="border-border hover:bg-muted group bg-transparent transition-all hover:border-teal/30"
+                className="border-border hover:bg-muted group hover:border-teal/30 bg-transparent transition-all"
               >
                 <a href="#features">
                   <Play className="mr-2 h-4 w-4" />
@@ -232,24 +252,29 @@ export function HeroSection() {
             >
               <div className="flex -space-x-2">
                 {[
-                  "bg-coral",
-                  "bg-teal",
-                  "bg-gold",
-                  "bg-foreground",
+                  'bg-coral',
+                  'bg-teal',
+                  'bg-gold',
+                  'bg-foreground',
                 ].map((color, i) => (
                   <motion.div
                     key={i}
-                    className={`w-8 h-8 rounded-full ${color} border-2 border-background flex items-center justify-center text-xs font-medium text-background shadow-xs`}
+                    className={`h-8 w-8 rounded-full ${color} border-background text-background flex items-center justify-center border-2 text-xs font-medium shadow-xs`}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.6 + i * 0.1, type: "spring" }}
+                    transition={{
+                      delay: 0.6 + i * 0.1,
+                      type: 'spring',
+                    }}
                   >
                     {String.fromCharCode(65 + i)}
                   </motion.div>
                 ))}
               </div>
-              <div className="text-sm text-muted-foreground">
-                <span className="font-semibold text-foreground">2,400+</span>{" "}
+              <div className="text-muted-foreground text-sm">
+                <span className="text-foreground font-semibold">
+                  2,400+
+                </span>{' '}
                 teams building
               </div>
             </motion.div>
@@ -257,27 +282,44 @@ export function HeroSection() {
 
           {/* Right content - Slider - 3 columns */}
           <motion.div
-            className="lg:col-span-3 relative"
+            className="relative lg:col-span-3"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="relative aspect-square max-w-[600px] mx-auto">
+            <div className="relative mx-auto aspect-square max-w-[650px]">
               <div className="relative flex h-full min-h-[420px] items-center justify-center overflow-hidden rounded-3xl p-8">
-                <AnimatePresence initial={false} mode="sync" custom={slideDirection}>
+                <AnimatePresence
+                  initial={false}
+                  mode="sync"
+                  custom={slideDirection}
+                >
                   <motion.img
                     key={heroSlides[activeSlide]}
                     src={heroSlides[activeSlide]}
                     alt={`Data infrastructure illustration ${activeSlide + 1}`}
                     custom={slideDirection}
-                    initial={{ x: slideDirection === "next" ? "100%" : "-100%" }}
+                    initial={{
+                      x:
+                        slideDirection === 'next'
+                          ? '100%'
+                          : '-100%',
+                    }}
                     animate={{ x: 0 }}
-                    exit={{ x: slideDirection === "next" ? "-100%" : "100%" }}
-                    transition={{ duration: 0.7, ease: "easeInOut" }}
+                    exit={{
+                      x:
+                        slideDirection === 'next'
+                          ? '-100%'
+                          : '100%',
+                    }}
+                    transition={{
+                      duration: 0.7,
+                      ease: 'easeInOut',
+                    }}
                     className="absolute max-h-[100%] w-auto max-w-[100%] object-contain"
                   />
                 </AnimatePresence>
-                <div className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 gap-2 rounded-full bg-background/70 px-3 py-2 backdrop-blur-sm">
+                <div className="bg-background/70 absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 gap-2 rounded-full px-3 py-2 backdrop-blur-sm">
                   {heroSlides.map((slide, index) => (
                     <button
                       key={slide}
@@ -285,10 +327,16 @@ export function HeroSection() {
                       aria-label={`Show slide ${index + 1}`}
                       aria-current={activeSlide === index}
                       onClick={() => {
-                        setSlideDirection(index > activeSlide ? "next" : "previous")
-                        setActiveSlide(index)
+                        setSlideDirection(
+                          index > activeSlide
+                            ? 'next'
+                            : 'previous',
+                        );
+                        setActiveSlide(index);
                       }}
-                      className={`h-2 rounded-full transition-all cursor-pointer ${activeSlide === index ? "w-6 bg-teal" : "w-2 bg-muted-foreground/50"
+                      className={`h-2 cursor-pointer rounded-full transition-all ${activeSlide === index
+                          ? 'bg-teal w-6'
+                          : 'bg-muted-foreground/50 w-2'
                         }`}
                     />
                   ))}
@@ -319,7 +367,7 @@ export function HeroSection() {
       </div>
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="from-background absolute right-0 bottom-0 left-0 h-32 bg-gradient-to-t to-transparent" />
     </section>
-  )
+  );
 }
