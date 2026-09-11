@@ -109,9 +109,9 @@ const heroBackgroundImage =
 // const heroBackgroundImage = "bg.png"
 
 const heroSlides = [
-  'https://markamotor.hu/assets/images/banner_right_image3.png',
-  'https://markamotor.hu/assets/images/banner_right_image8.png',
-  'https://www.markamotor.hu/assets/images/banner_right_image9.png',
+  'img/moto-1.png',
+  'img/moto-4.png',
+  'img/moto-3.png',
 ];
 
 export function HeroSection() {
@@ -335,8 +335,8 @@ export function HeroSection() {
                         setActiveSlide(index);
                       }}
                       className={`h-2 cursor-pointer rounded-full transition-all ${activeSlide === index
-                          ? 'bg-teal w-6'
-                          : 'bg-muted-foreground/50 w-2'
+                        ? 'bg-teal w-6'
+                        : 'bg-muted-foreground/50 w-2'
                         }`}
                     />
                   ))}
