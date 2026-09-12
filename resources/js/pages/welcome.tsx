@@ -1,6 +1,8 @@
 import { Head } from '@inertiajs/react';
 import { Navbar } from '@/components/navbar/navbar';
 import { HeroSection } from '@/components/hero/hero-section';
+import { MotorcycleFilterSection } from '@/components/filter/motorcycle-filter';
+import { RecommendedMotorcyclesSection } from '@/components/motorcycles/recommended-motorcycles';
 import { AboutSection } from '@/components/about/about-section';
 import { FeatureSection } from '@/components/features/feature-section';
 import { TestimonialsSection } from '@/components/testimonials/testimonials-section';
@@ -19,6 +21,8 @@ export default function Welcome() {
             <main className="bg-background text-foreground relative min-h-screen overflow-x-hidden">
                 <Navbar />
                 <HeroSection />
+                <MotorcycleFilterSection />
+                <RecommendedMotorcyclesSection />
                 <AboutSection />
                 <FeatureSection />
                 <TestimonialsSection />
