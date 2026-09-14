@@ -61,7 +61,7 @@ export function MotorcycleSliderCard({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-30px' }}
             transition={{ duration: 0.4, delay }}
-            className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border/70 bg-card/90 dark:bg-card/75 backdrop-blur-md shadow-sm transition-all duration-300 hover:border-teal/50 hover:shadow-xl hover:shadow-teal/5 ${className}`}
+            className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border/70 bg-card/90 dark:bg-card/75 backdrop-blur-md shadow-sm transition-all duration-300 hover:border-teal/50 hover:shadow-xl hover:shadow-teal/5 ${className}`}
         >
             {/* Top: Full-bleed edge-to-edge image slider (Horizontal Carousel Slide) */}
             <div className="group/slider relative w-full h-52 sm:h-56 overflow-hidden bg-muted/40 select-none">
