@@ -7,7 +7,11 @@ import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { register } from '@/routes';
 
-export function CTASection() {
+interface CTASectionProps {
+    content?: Record<string, string>;
+}
+
+export function CTASection({ content }: CTASectionProps = {}) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
 
@@ -42,7 +46,7 @@ export function CTASection() {
                             transition={{ delay: 0.2, duration: 0.5 }}
                             className="bg-background/15 text-background mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium"
                         >
-                            Limited Time Offer
+                            {content?.badge ?? 'Kapcsolat'}
                         </motion.div>
 
                         {/* Headline */}
@@ -56,9 +60,9 @@ export function CTASection() {
                             transition={{ delay: 0.3, duration: 0.6 }}
                             className="text-background mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl"
                         >
-                            Ready to transform your{' '}
+                            {content?.title ?? 'Készen áll, hogy megtalálja az'}{' '}
                             <span className="text-teal">
-                                data infrastructure
+                                {content?.title_highlight ?? 'álommotorját'}
                             </span>
                             ?
                         </motion.h2>
@@ -74,9 +78,8 @@ export function CTASection() {
                             transition={{ delay: 0.4, duration: 0.6 }}
                             className="text-background/70 mb-10 text-lg leading-relaxed"
                         >
-                            Join thousands of teams who have already made the
-                            switch. Start with our free tier and scale as you
-                            grow.
+                            {content?.description ??
+                                'Látogasson el szalonunkba és tekintse meg az aktuális kínálatunkat. Szakértő csapatunk segít az Ön igényeinek megfelelő motor kiválasztásában.'}
                         </motion.p>
 
                         {/* CTAs */}
@@ -96,7 +99,7 @@ export function CTASection() {
                                 className="bg-teal text-foreground hover:bg-teal/90 group cursor-pointer px-8"
                             >
                                 <Link href={register()}>
-                                    Get Started Free
+                                    {content?.button_primary ?? 'Kapcsolatfelvétel'}
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </Button>
@@ -106,7 +109,9 @@ export function CTASection() {
                                 asChild
                                 className="border-background/30 text-background hover:bg-background/10 bg-transparent"
                             >
-                                <a href="#features">Talk to Sales</a>
+                                <a href="#features">
+                                    {content?.button_secondary ?? 'Elérhetőségek'}
+                                </a>
                             </Button>
                         </motion.div>
 

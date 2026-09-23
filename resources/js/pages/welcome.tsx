@@ -5,11 +5,16 @@ import { MotorcycleFilterSection } from '@/components/filter/motorcycle-filter';
 import { RecommendedMotorcyclesSection } from '@/components/motorcycles/recommended-motorcycles';
 import { AboutSection } from '@/components/about/about-section';
 import { FeatureSection } from '@/components/features/feature-section';
-import { TestimonialsSection } from '@/components/testimonials/testimonials-section';
+import { Testimonial, TestimonialsSection } from '@/components/testimonials/testimonials-section';
 import { CTASection } from '@/components/cta/cta-section';
 import { Footer } from '@/components/footer/footer';
 
-export default function Welcome() {
+interface WelcomeProps {
+    pageContents?: Record<string, Record<string, string>>;
+    testimonials?: Testimonial[];
+}
+
+export default function Welcome({ pageContents, testimonials }: WelcomeProps = {}) {
     return (
         <>
             <Head title="Márka Motor | Motorkerékpár kereskedés és szerviz">
@@ -20,13 +25,13 @@ export default function Welcome() {
             </Head>
             <main className="bg-background text-foreground relative min-h-screen overflow-x-hidden">
                 <Navbar />
-                <HeroSection />
-                <MotorcycleFilterSection />
-                <RecommendedMotorcyclesSection />
-                <AboutSection />
-                <FeatureSection />
-                <TestimonialsSection />
-                <CTASection />
+                <HeroSection content={pageContents?.hero} testimonials={testimonials} />
+                <MotorcycleFilterSection content={pageContents?.filter} />
+                <RecommendedMotorcyclesSection content={pageContents?.recommended} />
+                <AboutSection content={pageContents?.about} />
+                <FeatureSection content={pageContents?.features} />
+                <TestimonialsSection content={pageContents?.testimonials} testimonials={testimonials} />
+                <CTASection content={pageContents?.cta} />
                 <Footer />
             </main>
         </>

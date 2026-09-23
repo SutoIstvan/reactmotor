@@ -221,7 +221,11 @@ const MOTORCYCLE_INVENTORY: MotorcycleItem[] = [
     },
 ];
 
-export function MotorcycleFilterSection() {
+interface MotorcycleFilterSectionProps {
+    content?: Record<string, string>;
+}
+
+export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProps = {}) {
     const [selectedBrand, setSelectedBrand] = useState<string>('all');
     const [selectedDesign, setSelectedDesign] = useState<string>('all');
     const [selectedPerformance, setSelectedPerformance] = useState<string>('all');
@@ -295,14 +299,17 @@ export function MotorcycleFilterSection() {
                     {/* Section header */}
                     <div className="relative z-10 mx-auto mb-12 max-w-3xl text-center">
                         <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
-                            Járműkereső
+                            {content?.badge ?? 'Járműkereső'}
                         </span>
                         <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
-                            Találd meg a stílusodhoz{' '}
-                            <span className="text-teal">illő motort</span>
+                            {content?.title ?? 'Találd meg a stílusodhoz'}{' '}
+                            <span className="text-teal">
+                                {content?.title_highlight ?? 'illő motort'}
+                            </span>
                         </h2>
                         <p className="text-muted-foreground text-lg leading-relaxed">
-                            Válassz márkát, karosszéria dizájnt és motorteljesítményt az aktuális készletünkből
+                            {content?.subtitle ??
+                                'Válassz márkát, karosszéria dizájnt és motorteljesítményt az aktuális készletünkből'}
                         </p>
                     </div>
 

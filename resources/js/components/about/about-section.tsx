@@ -23,9 +23,37 @@ const highlights = [
     },
 ];
 
-export function AboutSection() {
+interface AboutSectionProps {
+    content?: Record<string, string>;
+}
+
+export function AboutSection({ content }: AboutSectionProps = {}) {
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+
+    const highlights = [
+        {
+            icon: ShieldCheck,
+            title: content?.highlight_1_title ?? 'Garantált minőség',
+            description:
+                content?.highlight_1_description ??
+                'Minden jármű alapos műszaki átvizsgáláson esik át.',
+        },
+        {
+            icon: Wrench,
+            title: content?.highlight_2_title ?? 'Szakszerű szerviz',
+            description:
+                content?.highlight_2_description ??
+                'Tapasztalt szerelők és modern diagnosztikai háttér.',
+        },
+        {
+            icon: CheckCircle2,
+            title: content?.highlight_3_title ?? 'Teljes körű ügyintézés',
+            description:
+                content?.highlight_3_description ??
+                'Hitel, biztosítás és átírás sorban állás nélkül.',
+        },
+    ];
 
     return (
         <section
@@ -51,25 +79,21 @@ export function AboutSection() {
                     >
                         {/* Pill badge */}
                         <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
-                            Rólunk
+                            {content?.badge ?? 'Rólunk'}
                         </span>
 
                         {/* Heading */}
                         <h2 className="text-foreground mb-6 text-3xl font-bold tracking-tight text-pretty sm:text-4xl lg:text-5xl">
-                            Szenvedélyünk a motorozás,{' '}
+                            {content?.title ?? 'Szenvedélyünk a motorozás,'}{' '}
                             <span className="text-teal">
-                                garancia a szakértelem
+                                {content?.title_highlight ?? 'garancia a szakértelem'}
                             </span>
                         </h2>
 
                         {/* Description */}
                         <p className="text-muted-foreground mb-8 max-w-xl text-base leading-relaxed lg:text-lg">
-                            Több mint 15 éve nyújtunk megbízható megoldásokat
-                            motorkerékpárok és gépjárművek adásvételében,
-                            szervizelésében és teljes körű ügyintézésében.
-                            Nálunk a precizitás és az ügyfél-elégedettség az
-                            első: nincsenek rejtett hibák vagy kellemetlen
-                            meglepetések.
+                            {content?.description ??
+                                'Több mint 15 éve nyújtunk megbízható megoldásokat motorkerékpárok és gépjárművek adásvételében, szervizelésében és teljes körű ügyintézésében. Nálunk a precizitás és az ügyfél-elégedettség az első: nincsenek rejtett hibák vagy kellemetlen meglepetések.'}
                         </p>
 
                         {/* Highlights List */}
@@ -112,7 +136,7 @@ export function AboutSection() {
                                 className="group bg-foreground text-background hover:bg-foreground/90 cursor-pointer px-6"
                             >
                                 <a href="#features">
-                                    Szolgáltatásaink
+                                    {content?.button_primary ?? 'Szolgáltatásaink'}
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </a>
                             </Button>
@@ -122,7 +146,9 @@ export function AboutSection() {
                                 variant="outline"
                                 className="border-border hover:bg-accent cursor-pointer bg-transparent"
                             >
-                                <a href="#cta">Kapcsolatfelvétel</a>
+                                <a href="#cta">
+                                    {content?.button_secondary ?? 'Kapcsolatfelvétel'}
+                                </a>
                             </Button>
                         </div>
                     </motion.div>
@@ -156,7 +182,10 @@ export function AboutSection() {
                                 <img
                                     alt="Részletek és felszerelés"
                                     className="size-full object-cover object-center transition-transform duration-500 hover:scale-110"
-                                    src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80"
+                                    src={
+                                        content?.photo_1 ||
+                                        'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=600&q=80'
+                                    }
                                     loading="lazy"
                                 />
                             </motion.div>
@@ -168,13 +197,16 @@ export function AboutSection() {
                                     type: 'spring',
                                     stiffness: 300,
                                     damping: 20,
-                                }}
+                                    }}
                                 className="border-border/80 bg-accent absolute top-[36%] right-[50%] flex aspect-[5/6] w-[42%] justify-center overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xs"
                             >
                                 <img
                                     alt="Prémium motorkerékpár bemutató"
                                     className="size-full object-cover object-center transition-transform duration-500 hover:scale-110"
-                                    src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80"
+                                    src={
+                                        content?.photo_2 ||
+                                        'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=800&q=80'
+                                    }
                                     loading="lazy"
                                 />
                             </motion.div>
@@ -192,7 +224,10 @@ export function AboutSection() {
                                 <img
                                     alt="Szerviz és karbantartás"
                                     className="size-full object-cover object-center transition-transform duration-500 hover:scale-110"
-                                    src="https://images.unsplash.com/photo-1615172282427-9a57ef2d142e?auto=format&fit=crop&w=800&q=80"
+                                    src={
+                                        content?.photo_3 ||
+                                        'https://images.unsplash.com/photo-1615172282427-9a57ef2d142e?auto=format&fit=crop&w=800&q=80'
+                                    }
                                     loading="lazy"
                                 />
                             </motion.div>

@@ -8,10 +8,11 @@ import {
   useSpring,
   useTransform,
 } from 'framer-motion';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Play, Star } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { register } from '@/routes';
+import type { Testimonial } from '@/components/testimonials/testimonials-section';
 
 // Magnetic floating stat card with parallax
 function FloatingStatCard({
@@ -114,7 +115,65 @@ const heroSlides = [
   'img/moto-3.png',
 ];
 
-export function HeroSection() {
+interface HeroSectionProps {
+  content?: Record<string, string>;
+  testimonials?: Testimonial[];
+}
+
+const defaultHeroTestimonials: Testimonial[] = [
+  { name: 'Kovács Bence', quote: '', rating: 5, date: '', image: null },
+  {
+    name: 'Tóth Gábor',
+    quote: '',
+    rating: 5,
+    date: '',
+    image:
+      'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=120&q=80',
+  },
+  {
+    name: 'Németh Zoltán',
+    quote: '',
+    rating: 5,
+    date: '',
+    image:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
+  },
+  {
+    name: 'Szabó Balázs',
+    quote: '',
+    rating: 5,
+    date: '',
+    image:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80',
+  },
+];
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase() || 'M';
+}
+
+const avatarBgColors = [
+  'bg-amber-600 text-white',
+  'bg-teal text-white',
+  'bg-coral text-white',
+  'bg-indigo-600 text-white',
+];
+
+export function HeroSection({ content, testimonials }: HeroSectionProps = {}) {
+  const list =
+    testimonials && testimonials.length > 0
+      ? testimonials
+      : defaultHeroTestimonials;
+  const firstFour = list.slice(0, 4);
+  const totalComments =
+    testimonials && testimonials.length > 0 ? testimonials.length : 12;
+
+  const displayCount = content?.reviews_count || `${totalComments}+`;
+  const displayLabel = content?.reviews_label || 'elégedett motoros véleménye';
   const [activeSlide, setActiveSlide] = useState(0);
   const [slideDirection, setSlideDirection] = useState<'next' | 'previous'>(
     'next',
@@ -165,7 +224,7 @@ export function HeroSection() {
                   <span className="bg-teal absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
                   <span className="bg-teal relative inline-flex h-2 w-2 rounded-full" />
                 </span>
-                Üdvözöljük honlapunkon!
+                {content?.badge ?? 'Üdvözöljük honlapunkon!'}
               </span>
             </motion.div>
 
@@ -177,7 +236,7 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
             >
-              Találd meg a hozzád illő{' '}
+              {content?.title ?? 'Találd meg a hozzád illő'}{' '}
               <span className="relative inline-block">
                 {/* Gradient text with glow */}
                 <span
@@ -187,7 +246,7 @@ export function HeroSection() {
                       '0 0 40px hsl(0 72% 56% / 0.3)',
                   }}
                 >
-                  motort!
+                  {content?.title_highlight ?? 'motort!'}
                 </span>
                 {/* Underline highlight */}
                 <motion.span
@@ -207,10 +266,8 @@ export function HeroSection() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Vállalkozásunk használt nagy motorokkal, új
-              robogókkal, teljes körű szerviz, műszaki és
-              eredetiség vizsga, biztosítás, átírás
-              lebonyolításával várja ügyfeleit!
+              {content?.subtitle ??
+                'Vállalkozásunk használt nagy motorokkal, új robogókkal, teljes körű szerviz, műszaki és eredetiség vizsga, biztosítás, átírás lebonyolításával várja ügyfeleit!'}
             </motion.p>
 
             {/* CTAs */}
@@ -226,7 +283,7 @@ export function HeroSection() {
                 className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 px-8 shadow-lg transition-all hover:shadow-xl"
               >
                 <Link href={register()}>
-                  Részletek
+                  {content?.button_primary ?? 'Részletek'}
                   <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </Link>
               </Button>
@@ -238,45 +295,71 @@ export function HeroSection() {
               >
                 <a href="#features">
                   <Play className="mr-2 h-4 w-4" />
-                  Elérhetőségek
+                  {content?.button_secondary ?? 'Elérhetőségek'}
                 </a>
               </Button>
             </motion.div>
 
             {/* Social proof */}
             <motion.div
-              className="flex items-center gap-6 pt-4"
+              className="pt-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <div className="flex -space-x-2">
-                {[
-                  'bg-coral',
-                  'bg-teal',
-                  'bg-gold',
-                  'bg-foreground',
-                ].map((color, i) => (
-                  <motion.div
-                    key={i}
-                    className={`h-8 w-8 rounded-full ${color} border-background text-background flex items-center justify-center border-2 text-xs font-medium shadow-xs`}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{
-                      delay: 0.6 + i * 0.1,
-                      type: 'spring',
-                    }}
-                  >
-                    {String.fromCharCode(65 + i)}
-                  </motion.div>
-                ))}
-              </div>
-              <div className="text-muted-foreground text-sm">
-                <span className="text-foreground font-semibold">
-                  2,400+
-                </span>{' '}
-                teams building
-              </div>
+              <a
+                href="#testimonials"
+                className="group inline-flex items-center gap-4 transition-transform hover:scale-[1.02]"
+              >
+                <div className="flex -space-x-2.5">
+                  {firstFour.map((t, i) => (
+                    <motion.div
+                      key={t.id ?? t.name ?? i}
+                      className="border-background relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 shadow-xs"
+                      title={t.name}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        delay: 0.6 + i * 0.1,
+                        type: 'spring',
+                      }}
+                    >
+                      {t.image ? (
+                        <img
+                          src={t.image}
+                          alt={t.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div
+                          className={`flex h-full w-full items-center justify-center text-[11px] font-bold ${
+                            avatarBgColors[i % avatarBgColors.length]
+                          }`}
+                        >
+                          {getInitials(t.name)}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="text-sm leading-tight">
+                  <div className="flex items-center gap-1.5 font-bold text-foreground">
+                    <span>{displayCount}</span>
+                    <div className="flex items-center text-amber-400">
+                      {[...Array(5)].map((_, idx) => (
+                        <Star
+                          key={idx}
+                          className="h-3 w-3 fill-amber-400 stroke-amber-400"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <span className="text-muted-foreground group-hover:text-foreground text-xs transition-colors">
+                    {displayLabel}
+                  </span>
+                </div>
+              </a>
             </motion.div>
           </div>
 

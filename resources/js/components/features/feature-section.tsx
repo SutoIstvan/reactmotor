@@ -67,11 +67,20 @@ const colorClasses = {
     },
 };
 
+interface FeatureItem {
+    icon: typeof Zap;
+    title: string;
+    description: string;
+    color: string;
+    stat: string;
+    statLabel: string;
+}
+
 function FeatureCard({
     feature,
     index,
 }: {
-    feature: (typeof features)[0];
+    feature: FeatureItem;
     index: number;
 }) {
     const ref = useRef(null);
@@ -121,9 +130,56 @@ function FeatureCard({
     );
 }
 
-export function FeatureSection() {
+interface FeatureSectionProps {
+    content?: Record<string, string>;
+}
+
+export function FeatureSection({ content }: FeatureSectionProps = {}) {
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+
+    const featureItems: FeatureItem[] = [
+        {
+            icon: Zap,
+            title: content?.feature_1_title ?? 'Hitel és biztosítás',
+            description:
+                content?.feature_1_description ??
+                'Teljes körű hitel- és biztosítási ügyintézés kedvező feltételekkel, gyors és rugalmas megoldások.',
+            color: 'teal',
+            stat: '0% THM',
+            statLabel: 'elérhető',
+        },
+        {
+            icon: Shield,
+            title: content?.feature_2_title ?? 'Átírás lebonyolítás',
+            description:
+                content?.feature_2_description ??
+                'Teljes körű jármű átírás lebonyolítása, papírmunka nélkül, gyorsan és megbízhatóan.',
+            color: 'teal',
+            stat: '1 nap',
+            statLabel: 'ügyintézés',
+        },
+        {
+            icon: LineChart,
+            title: content?.feature_3_title ?? 'Teljes körű szerviz szolgáltatás',
+            description:
+                content?.feature_3_description ??
+                'Professzionális szervizszolgáltatás tapasztalt szerelőkkel és modern diagnosztikai berendezésekkel.',
+            color: 'teal',
+            stat: '15+ év',
+            statLabel: 'tapasztalat',
+        },
+        {
+            icon: Layers,
+            title: content?.feature_4_title ?? 'Műszaki és eredetiség vizsga',
+            description:
+                content?.feature_4_description ??
+                'Hivatalos műszaki vizsga és eredetiségvizsgálat egy helyen, sorbanállás nélkül.',
+            color: 'teal',
+            stat: 'Helyben',
+            statLabel: 'vizsgáztatás',
+        },
+    ];
 
     return (
         <section
@@ -145,22 +201,23 @@ export function FeatureSection() {
                     className="mx-auto mb-16 max-w-3xl text-center"
                 >
                     <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
-                        Features
+                        {content?.badge ?? 'Szolgáltatások'}
                     </span>
                     <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
-                        Teljes körű szolgáltatással{' '}
-                        <span className="text-teal">várjuk ügyfeleinket!</span>
+                        {content?.title ?? 'Teljes körű szolgáltatással'}{' '}
+                        <span className="text-teal">
+                            {content?.title_highlight ?? 'várjuk ügyfeleinket!'}
+                        </span>
                     </h2>
                     <p className="text-muted-foreground text-lg leading-relaxed">
-                        From real-time processing to enterprise security, we
-                        have got you covered with a complete data infrastructure
-                        platform.
+                        {content?.subtitle ??
+                            'A hitelügyintézéstől a szervizszolgáltatásig, mindent egy helyen intézhet.'}
                     </p>
                 </motion.div>
 
                 {/* Features grid */}
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    {features.map((feature, index) => (
+                    {featureItems.map((feature, index) => (
                         <FeatureCard
                             key={feature.title}
                             feature={feature}

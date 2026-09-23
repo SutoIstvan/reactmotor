@@ -77,7 +77,11 @@ export const RECOMMENDED_MOTORCYCLES: RecommendedMotorcycleData[] = [
     },
 ];
 
-export function RecommendedMotorcyclesSection() {
+interface RecommendedMotorcyclesSectionProps {
+    content?: Record<string, string>;
+}
+
+export function RecommendedMotorcyclesSection({ content }: RecommendedMotorcyclesSectionProps = {}) {
     const handleViewAll = () => {
         const filterSection = document.getElementById('filter-section');
         if (filterSection) {
@@ -103,14 +107,17 @@ export function RecommendedMotorcyclesSection() {
                     className="mx-auto mb-16 max-w-3xl text-center"
                 >
                     <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
-                        Ajánlott motorok
+                        {content?.badge ?? 'Ajánlott motorok'}
                     </span>
                     <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
-                        Kiemelt ajánlataink és{' '}
-                        <span className="text-teal">motorkerékpárjaink</span>
+                        {content?.title ?? 'Kiemelt ajánlataink és'}{' '}
+                        <span className="text-teal">
+                            {content?.title_highlight ?? 'motorkerékpárjaink'}
+                        </span>
                     </h2>
                     <p className="text-muted-foreground text-lg leading-relaxed">
-                        Gondosan átvizsgált, prémium állapotú motorkerékpárok azonnal elvihető szaloni raktárkészletünkből, teljes körű garanciával.
+                        {content?.subtitle ??
+                            'Gondosan átvizsgált, prémium állapotú motorkerékpárok azonnal elvihető szaloni raktárkészletünkből, teljes körű garanciával.'}
                     </p>
                 </motion.div>
 
@@ -139,7 +146,9 @@ export function RecommendedMotorcyclesSection() {
                         onClick={handleViewAll}
                         className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 cursor-pointer px-8 shadow-lg transition-all hover:shadow-xl"
                     >
-                        <span>Összes motorkerékpár megtekintése</span>
+                        <span>
+                            {content?.button_view_all ?? 'Összes motorkerékpár megtekintése'}
+                        </span>
                         <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
                 </motion.div>
