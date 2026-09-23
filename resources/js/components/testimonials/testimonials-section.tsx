@@ -114,7 +114,7 @@ export function TestimonialsSection() {
     return (
         <section
             id="testimonials"
-            className="relative overflow-hidden py-24 lg:py-32"
+            className="relative overflow-hidden pb-10 lg:pb-10 mt-10"
         >
             <div className="relative z-10 container mx-auto px-6 lg:px-12">
                 {/* Section header styled identically to Features block */}

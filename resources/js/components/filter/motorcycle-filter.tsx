@@ -8,7 +8,7 @@ import {
     Gauge,
     Sparkles,
     ChevronDown,
-    SlidersHorizontal,
+    ArrowRight,
     ArrowUpRight,
     Tag,
 } from 'lucide-react';
@@ -292,19 +292,16 @@ export function MotorcycleFilterSection() {
                     className="relative p-6 sm:p-8 lg:p-10"
                 >
 
-                    {/* Header Row */}
-                    <div className="relative z-10 mb-8 flex flex-col items-center text-center pb-3">
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                            <span className="inline-flex items-center gap-1.5 rounded-full border border-teal/30 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal">
-                                <SlidersHorizontal className="h-3.5 w-3.5" />
-                                Járműkereső & Szűrő
-                            </span>
-
-                        </div>
-                        <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-                            Találd meg a stílusodhoz illő motort
+                    {/* Section header */}
+                    <div className="relative z-10 mx-auto mb-12 max-w-3xl text-center">
+                        <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
+                            Járműkereső
+                        </span>
+                        <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
+                            Találd meg a stílusodhoz{' '}
+                            <span className="text-teal">illő motort</span>
                         </h2>
-                        <p className="mt-1 text-sm text-muted-foreground max-w-2xl">
+                        <p className="text-muted-foreground text-lg leading-relaxed">
                             Válassz márkát, karosszéria dizájnt és motorteljesítményt az aktuális készletünkből
                         </p>
                     </div>
@@ -530,14 +527,15 @@ export function MotorcycleFilterSection() {
                             type="button"
                             size="lg"
                             onClick={handleSearch}
-                            className="group relative w-full sm:w-auto min-w-[260px] cursor-pointer overflow-hidden rounded-2xl bg-gradient-to-r from-teal to-teal/90 px-10 py-4 text-base font-semibold text-white shadow-xl shadow-teal/25 transition-all hover:shadow-2xl hover:shadow-teal/35 hover:scale-[1.02] active:scale-[0.98]"
+                            className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 w-full sm:w-auto min-w-[260px] cursor-pointer px-8 shadow-lg transition-all hover:shadow-xl"
                         >
                             <span className="relative z-10 flex items-center justify-center gap-2.5">
-                                <Search className="h-5 w-5 transition-transform group-hover:rotate-12 group-hover:scale-110" />
+                                <Search className="h-4 w-4 transition-transform group-hover:scale-110" />
                                 <span>Keresés indítása</span>
-                                <span className="ml-1.5 rounded-full bg-white/20 px-2 py-0.5 text-xs font-bold">
+                                <span className="ml-1 rounded-full bg-background/20 px-2 py-0.5 text-xs font-bold text-background">
                                     {filteredMotorcycles.length} db
                                 </span>
+                                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </span>
                         </Button>
                     </div>

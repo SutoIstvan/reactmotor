@@ -31,7 +31,7 @@ export function AboutSection() {
         <section
             id="about"
             ref={sectionRef}
-            className="relative overflow-hidden py-24 lg:py-32"
+            className="relative overflow-hidden pb-16 lg:pb-20 mt-10"
         >
             {/* Subtle background glow */}
             <div className="bg-teal/5 pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />

@@ -128,7 +128,7 @@ export function FeatureSection() {
     return (
         <section
             id="features"
-            className="relative overflow-hidden py-24 lg:py-32"
+            className="relative overflow-hidden pb-16 lg:pb-20 mt-10"
         >
             {/* Angled divider top */}
             <div className="bg-background absolute top-0 right-0 left-0 h-24 origin-top-left -translate-y-12 -skew-y-2 transform" />

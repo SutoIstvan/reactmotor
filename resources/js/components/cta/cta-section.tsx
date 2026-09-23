@@ -2,7 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { register } from '@/routes';
@@ -40,9 +40,8 @@ export function CTASection() {
                                     : { opacity: 0, scale: 0.9 }
                             }
                             transition={{ delay: 0.2, duration: 0.5 }}
-                            className="bg-teal/20 text-teal mb-8 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium"
+                            className="bg-background/15 text-background mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium"
                         >
-                            <Sparkles className="h-4 w-4" />
                             Limited Time Offer
                         </motion.div>
 

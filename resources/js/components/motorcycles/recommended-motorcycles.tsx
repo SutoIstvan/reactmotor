@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MotorcycleSliderCard } from './motorcycle-slider-card';
 import type { Motorcycle } from './motorcycle-card';
@@ -86,7 +86,7 @@ export function RecommendedMotorcyclesSection() {
     };
 
     return (
-        <section id="recommended-section" className="relative z-20 py-16 sm:py-20 bg-background/50">
+        <section id="recommended-section" className="relative z-20 pb-16 sm:pb-20 bg-background/50">
             {/* Ambient background glow accents */}
             <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
                 <div className="absolute top-1/3 left-1/4 h-80 w-80 rounded-full bg-teal/5 blur-3xl" />
@@ -94,41 +94,25 @@ export function RecommendedMotorcyclesSection() {
             </div>
 
             <div className="container mx-auto px-6 lg:px-12">
-                {/* Section Header */}
-                <div className="mb-12 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 15 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                        className="flex justify-center mb-3"
-                    >
-                        <span className="inline-flex items-center gap-2 rounded-full border border-teal/30 bg-teal/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-teal">
-                            <Sparkles className="h-3.5 w-3.5" />
-                            Kiemelt kínálat • Ajánlott motorok
-                        </span>
-                    </motion.div>
-
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
-                    >
-                        Ajánlott motorkerékpárok
-                    </motion.h2>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.15 }}
-                        className="mt-3 text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto"
-                    >
+                {/* Section header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-100px' }}
+                    transition={{ duration: 0.6 }}
+                    className="mx-auto mb-16 max-w-3xl text-center"
+                >
+                    <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
+                        Ajánlott motorok
+                    </span>
+                    <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
+                        Kiemelt ajánlataink és{' '}
+                        <span className="text-teal">motorkerékpárjaink</span>
+                    </h2>
+                    <p className="text-muted-foreground text-lg leading-relaxed">
                         Gondosan átvizsgált, prémium állapotú motorkerékpárok azonnal elvihető szaloni raktárkészletünkből, teljes körű garanciával.
-                    </motion.p>
-                </div>
+                    </p>
+                </motion.div>
 
                 {/* 4 Clean Motorcycle Cards with Image Slider */}
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -153,16 +137,11 @@ export function RecommendedMotorcyclesSection() {
                         type="button"
                         size="lg"
                         onClick={handleViewAll}
-                        className="group relative cursor-pointer overflow-hidden rounded-2xl border border-teal/40 bg-card px-8 py-4 text-base font-semibold text-foreground shadow-lg shadow-teal/5 transition-all hover:border-teal hover:bg-teal hover:text-white hover:shadow-xl hover:shadow-teal/20 hover:scale-[1.02] active:scale-[0.98]"
+                        className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 cursor-pointer px-8 shadow-lg transition-all hover:shadow-xl"
                     >
-                        <span className="relative z-10 flex items-center justify-center gap-2.5">
-                            <span>Összes motorkerékpár megtekintése</span>
-                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </span>
+                        <span>Összes motorkerékpár megtekintése</span>
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Button>
-                    <p className="text-xs text-muted-foreground">
-                        Keresés gyártó, kivitel és motorteljesítmény szerint a fenti szűrőnkkel
-                    </p>
                 </motion.div>
             </div>
         </section>

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Gauge, Calendar, Navigation, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Gauge, Calendar, Navigation, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export interface Motorcycle {
@@ -44,7 +44,7 @@ export function MotorcycleCard({
     delay = 0,
     layout = false,
     ctaHref = '#cta',
-    ctaText = 'Érdekel a motor',
+    ctaText = 'Részletek',
     showBadge = true,
     showCategory = true,
     showSpecs = true,
@@ -206,11 +206,11 @@ export function MotorcycleCard({
                     {showCta && (
                         <Button
                             asChild
-                            className="w-full bg-foreground text-background hover:bg-foreground/90 cursor-pointer rounded-xl font-medium text-sm transition-all group/btn shadow-xs hover:shadow-md"
+                            className="w-full bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 cursor-pointer rounded-xl font-medium text-sm shadow-md transition-all hover:shadow-lg"
                         >
                             <a href={ctaHref}>
                                 <span>{ctaText}</span>
-                                <ArrowUpRight className="ml-1.5 h-4 w-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                                <ArrowRight className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </a>
                         </Button>
                     )}

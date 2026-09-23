@@ -23,7 +23,7 @@ export function MotorcycleSliderCard({
     delay = 0,
     layout = false,
     ctaHref = '#cta',
-    ctaText = 'Érdekel a motor',
+    ctaText = 'Részletek',
 }: MotorcycleSliderCardProps) {
     const slideImages =
         motorcycle.images && motorcycle.images.length > 0

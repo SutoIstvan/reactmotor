@@ -171,7 +171,7 @@ export function HeroSection() {
 
             {/* Headline with tighter letter-spacing */}
             <motion.h1
-              className="text-foreground text-4xl leading-[1.1] font-bold text-balance md:text-5xl lg:text-6xl"
+              className="text-foreground text-4xl leading-[1.1] font-bold text-balance md:text-5xl lg:text-5xl"
               style={{ letterSpacing: '-0.05em' }}
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
