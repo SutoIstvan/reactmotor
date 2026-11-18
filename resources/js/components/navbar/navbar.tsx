@@ -9,11 +9,12 @@ import { cn } from '@/lib/utils';
 import { dashboard, login, register } from '@/routes';
 
 const navLinks = [
-    { label: 'Rólunk', href: '#about' },
-    { label: 'Features', href: '#features' },
-    { label: 'Stats', href: '#stats' },
-    { label: 'Testimonials', href: '#testimonials' },
-    { label: 'Pricing', href: '#cta' },
+    { label: 'Címlap', href: '/' },
+    { label: 'Motorok', href: '/motorok' },
+    { label: 'Bemutatkozás', href: '/bemutatkozas' },
+    { label: 'Hasznos', href: '/hasznos' },
+    { label: 'Felvásárlás', href: '/felvasarlas' },
+    { label: 'Elérhetőségek', href: '/elerhetosegek' },
 ];
 
 export function Navbar() {
@@ -57,15 +58,26 @@ export function Navbar() {
 
                         {/* Desktop Navigation */}
                         <div className="hidden items-center gap-8 lg:flex">
-                            {navLinks.map((link) => (
-                                <a
-                                    key={link.label}
-                                    href={link.href}
-                                    className="text-muted-foreground hover:text-foreground text-sm font-medium transition-colors"
-                                >
-                                    {link.label}
-                                </a>
-                            ))}
+                            {navLinks.map((link) => {
+                                const isActive =
+                                    link.href === '/'
+                                        ? page.url === '/'
+                                        : page.url.startsWith(link.href);
+                                return (
+                                    <Link
+                                        key={link.label}
+                                        href={link.href}
+                                        className={cn(
+                                            'text-sm font-medium transition-colors',
+                                            isActive
+                                                ? 'text-teal font-semibold'
+                                                : 'text-muted-foreground hover:text-foreground',
+                                        )}
+                                    >
+                                        {link.label}
+                                    </Link>
+                                );
+                            })}
                         </div>
 
                         {/* Desktop CTAs */}
@@ -128,18 +140,29 @@ export function Navbar() {
                     >
                         <div className="container mx-auto px-6 py-8">
                             <nav className="flex flex-col gap-4">
-                                {navLinks.map((link) => (
-                                    <a
-                                        key={link.label}
-                                        href={link.href}
-                                        onClick={() =>
-                                            setIsMobileMenuOpen(false)
-                                        }
-                                        className="text-foreground border-border border-b py-3 text-lg font-medium"
-                                    >
-                                        {link.label}
-                                    </a>
-                                ))}
+                                {navLinks.map((link) => {
+                                    const isActive =
+                                        link.href === '/'
+                                            ? page.url === '/'
+                                            : page.url.startsWith(link.href);
+                                    return (
+                                        <Link
+                                            key={link.label}
+                                            href={link.href}
+                                            onClick={() =>
+                                                setIsMobileMenuOpen(false)
+                                            }
+                                            className={cn(
+                                                'border-border border-b py-3 text-lg font-medium transition-colors',
+                                                isActive
+                                                    ? 'text-teal font-semibold'
+                                                    : 'text-foreground',
+                                            )}
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    );
+                                })}
                             </nav>
                             <div className="mt-8 flex flex-col gap-4">
                                 {auth?.user ? (

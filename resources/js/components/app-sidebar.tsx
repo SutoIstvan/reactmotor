@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FileText, FolderGit2, LayoutGrid, MessageSquareQuote } from 'lucide-react';
+import { Bike, BookOpen, FileText, FolderGit2, LayoutGrid, MessageSquareQuote } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -21,6 +21,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Motorkerékpárok',
+        href: '/admin/motors',
+        icon: Bike,
     },
     {
         title: 'Tartalom kezelés',

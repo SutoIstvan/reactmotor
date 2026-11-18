@@ -8,11 +8,21 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+const publicPages = [
+    'welcome',
+    'about',
+    'bemutatkozas',
+    'motorok',
+    'hasznos',
+    'felvasarlas',
+    'elerhetosegek',
+];
+
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
-            case name === 'welcome':
+            case publicPages.includes(name):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;

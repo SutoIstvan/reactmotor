@@ -95,12 +95,21 @@ export function Footer() {
                                 <ul className="space-y-3">
                                     {links.map((link) => (
                                         <li key={link}>
-                                            <a
-                                                href="#"
-                                                className="text-background/60 hover:text-teal text-sm transition-colors"
-                                            >
-                                                {link}
-                                            </a>
+                                            {link === 'About' ? (
+                                                <Link
+                                                    href="/bemutatkozas"
+                                                    className="text-background/60 hover:text-teal text-sm transition-colors"
+                                                >
+                                                    {link}
+                                                </Link>
+                                            ) : (
+                                                <a
+                                                    href="#"
+                                                    className="text-background/60 hover:text-teal text-sm transition-colors"
+                                                >
+                                                    {link}
+                                                </a>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>

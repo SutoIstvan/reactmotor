@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowRight, CheckCircle2, ShieldCheck, Wrench } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 const highlights = [
     {
@@ -25,11 +26,12 @@ const highlights = [
 
 interface AboutSectionProps {
     content?: Record<string, string>;
+    className?: string;
 }
 
-export function AboutSection({ content }: AboutSectionProps = {}) {
+export function AboutSection({ content, className }: AboutSectionProps = {}) {
     const sectionRef = useRef(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+    const isInView = useInView(sectionRef, { once: true, margin: '-20px' });
 
     const highlights = [
         {
@@ -59,7 +61,7 @@ export function AboutSection({ content }: AboutSectionProps = {}) {
         <section
             id="about"
             ref={sectionRef}
-            className="relative overflow-hidden pb-16 lg:pb-20 mt-10"
+            className={cn('relative overflow-hidden pb-16 lg:pb-20 mt-10', className)}
         >
             {/* Subtle background glow */}
             <div className="bg-teal/5 pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl" />
@@ -79,7 +81,7 @@ export function AboutSection({ content }: AboutSectionProps = {}) {
                     >
                         {/* Pill badge */}
                         <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
-                            {content?.badge ?? 'Rólunk'}
+                            {content?.badge ?? 'Bemutatkozás'}
                         </span>
 
                         {/* Heading */}
@@ -135,7 +137,7 @@ export function AboutSection({ content }: AboutSectionProps = {}) {
                                 size="lg"
                                 className="group bg-foreground text-background hover:bg-foreground/90 cursor-pointer px-6"
                             >
-                                <a href="#features">
+                                <a href="/#features">
                                     {content?.button_primary ?? 'Szolgáltatásaink'}
                                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                                 </a>
@@ -146,7 +148,7 @@ export function AboutSection({ content }: AboutSectionProps = {}) {
                                 variant="outline"
                                 className="border-border hover:bg-accent cursor-pointer bg-transparent"
                             >
-                                <a href="#cta">
+                                <a href="/#cta">
                                     {content?.button_secondary ?? 'Kapcsolatfelvétel'}
                                 </a>
                             </Button>
