@@ -45,6 +45,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 import {
     CatalogMotorCard,
+    CatalogMotorCardSkeleton,
     MotorData,
     formatHuf,
     formatImageUrl,
@@ -249,7 +250,17 @@ export default function Motorok({
     const [selectedMotor, setSelectedMotor] = useState<MotorData | null>(null);
     const [modalImageIndex, setModalImageIndex] = useState(0);
 
-    const isPending = false;
+    // Track page transitions for skeleton display
+    const [isPageLoading, setIsPageLoading] = useState(false);
+
+    useEffect(() => {
+        const unbindStart = router.on('start', () => setIsPageLoading(true));
+        const unbindFinish = router.on('finish', () => setIsPageLoading(false));
+        return () => {
+            unbindStart();
+            unbindFinish();
+        };
+    }, []);
 
     // Apply filters to backend
     const applyFilters = (overrides: Record<string, string> = {}) => {
@@ -1077,22 +1088,23 @@ export default function Motorok({
                                 </div>
                             ) : (
                                 <div
-                                    className={
+                                    className={cn(
                                         viewMode === 'grid'
                                             ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
-                                            : 'flex flex-col gap-4'
-                                    }
+                                            : 'flex flex-col gap-4',
+                                        isPageLoading && 'opacity-60 pointer-events-none transition-opacity duration-200'
+                                    )}
                                 >
-                                    {motors.data.map((motor, idx) => (
+                                    {motors.data.map((motor, index) => (
                                         <CatalogMotorCard
                                             key={motor.id}
                                             motor={motor}
+                                            priority={index < 6}
                                             layout={viewMode}
                                             onQuickView={(m) => {
                                                 setSelectedMotor(m);
                                                 setModalImageIndex(0);
                                             }}
-                                            delay={idx * 0.03}
                                         />
                                     ))}
                                 </div>
