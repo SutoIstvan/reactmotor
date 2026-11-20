@@ -128,6 +128,11 @@ class Motor extends Model
             }
         }
 
+        // A2 license filter (<= 35 kW)
+        if (!empty($filters['a2'])) {
+            $query->whereRaw('CAST(performance AS INTEGER) <= ? AND CAST(performance AS INTEGER) > 0', [35]);
+        }
+
         // Condition filter
         if (!empty($filters['condition']) && $filters['condition'] !== 'all') {
             $query->where('condition', $filters['condition']);

@@ -4,15 +4,37 @@ use App\Http\Controllers\Admin\MotorController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\CatalogController;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Motor;
 use App\Models\PageContent;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    $brands = Brand::whereHas('motors', fn($q) => $q->withoutTrashed())
+        ->withCount(['motors' => fn($q) => $q->withoutTrashed()])
+        ->orderBy('name')
+        ->get(['id', 'name']);
+
+    $categories = Category::whereHas('motors', fn($q) => $q->withoutTrashed())
+        ->withCount(['motors' => fn($q) => $q->withoutTrashed()])
+        ->orderBy('name')
+        ->get(['id', 'name']);
+
+    $motors = Motor::withoutTrashed()
+        ->with(['brand:id,name', 'category:id,name', 'images'])
+        ->orderByDesc('top')
+        ->orderByDesc('id')
+        ->get();
+
     return Inertia::render('welcome', [
         'pageContents' => PageContent::allForPage('home'),
         'testimonials' => Testimonial::active()->orderBy('order', 'asc')->orderByDesc('id')->get(),
+        'brands' => $brands,
+        'categories' => $categories,
+        'motors' => $motors,
     ]);
 })->name('home');
 

@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
+import { Link } from '@inertiajs/react';
 import {
     Search,
     RotateCcw,
-    Gauge,
     Sparkles,
     ArrowRight,
-    ArrowUpRight,
     Tag,
+    Gauge,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -19,273 +19,98 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { MotorcycleCard } from '@/components/motorcycles/motorcycle-card';
+import type { MotorData } from '@/components/catalog/catalog-motor-card';
 
-// Brands available for filtering
-export const BRANDS = [
-    { value: 'all', label: 'Összes márka (Mind)', origin: 'Bármely gyártó' },
-    { value: 'Honda', label: 'Honda', origin: 'Japán' },
-    { value: 'Yamaha', label: 'Yamaha', origin: 'Japán' },
-    { value: 'Kawasaki', label: 'Kawasaki', origin: 'Japán' },
-    { value: 'Suzuki', label: 'Suzuki', origin: 'Japán' },
-    { value: 'BMW', label: 'BMW', origin: 'Németország' },
-    { value: 'Ducati', label: 'Ducati', origin: 'Olaszország' },
-    { value: 'KTM', label: 'KTM', origin: 'Ausztria' },
-    { value: 'Harley-Davidson', label: 'Harley-Davidson', origin: 'USA' },
-    { value: 'Aprilia', label: 'Aprilia', origin: 'Olaszország' },
-    { value: 'Triumph', label: 'Triumph', origin: 'Egyesült Királyság' },
-] as const;
-
-// Design / Body style categories
-export const DESIGNS = [
-    {
-        value: 'all',
-        label: 'Összes dizájn (Mind)',
-        description: 'Bármely felépítés és kategória',
-    },
-    {
-        value: 'Sport',
-        label: 'Sport / Supersport',
-        description: 'Aerodinamikus idomok, versenypálya DNS',
-    },
-    {
-        value: 'Naked',
-        label: 'Naked / Street',
-        description: 'Agresszív csupasz forma, dinamikus városi élmény',
-    },
-    {
-        value: 'Touring',
-        label: 'Touring / Adventure',
-        description: 'Hosszútávú túrakomfort és terepállóság',
-    },
-    {
-        value: 'Cruiser',
-        label: 'Cruiser / Chopper',
-        description: 'Klasszikus króm stílus, alacsony üléspozíció',
-    },
-    {
-        value: 'Scooter',
-        label: 'Robogó / Maxi Scooter',
-        description: 'Automata kényelem a mindennapi mobilitáshoz',
-    },
-    {
-        value: 'Cafe-Racer',
-        label: 'Cafe Racer / Retro',
-        description: 'Időtlen vintage elegancia modern technológiával',
-    },
-] as const;
-
-// Performance / Power brackets
-export const PERFORMANCES = [
-    {
-        value: 'all',
-        label: 'Összes teljesítmény (Mind)',
-        range: 'Bármely hengerűrtartalom és erő',
-    },
-    {
-        value: 'entry',
-        label: 'Belépő & A2 kategória',
-        range: '≤ 35 kW (48 LE-ig) • 125–400 cm³',
-        maxKw: 35,
-    },
-    {
-        value: 'mid',
-        label: 'Középkategória (Kiegyensúlyozott)',
-        range: '35–70 kW (48–95 LE) • 500–750 cm³',
-        minKw: 35,
-        maxKw: 70,
-    },
-    {
-        value: 'high',
-        label: 'Nagy teljesítmény (Sport & Túra)',
-        range: '70–100 kW (95–136 LE) • 750–1000 cm³',
-        minKw: 70,
-        maxKw: 100,
-    },
-    {
-        value: 'extreme',
-        label: 'Superbike & Extrém erő',
-        range: '100+ kW (136+ LE felett) • 1000+ cm³',
-        minKw: 100,
-    },
-] as const;
-
-// Sample motorcycle inventory for interactive results preview
-export interface MotorcycleItem {
-    id: string;
-    title: string;
-    brand: string;
-    design: string;
-    designLabel: string;
-    powerKw: number;
-    powerHp: number;
-    engineCc: number;
-    year: number;
-    mileageKm: number;
-    priceHuf: string;
-    image: string;
-    status: 'Azonnal vihető' | 'Foglalható' | 'Újszerű állapot';
-    badgeColor: 'teal' | 'coral' | 'gold';
+export interface DBBrand {
+    id: number;
+    name: string;
+    motors_count?: number;
 }
 
-const MOTORCYCLE_INVENTORY: MotorcycleItem[] = [
-    {
-        id: '1',
-        title: 'Yamaha MT-09 SP ABS',
-        brand: 'Yamaha',
-        design: 'Naked',
-        designLabel: 'Naked / Street',
-        powerKw: 87.5,
-        powerHp: 119,
-        engineCc: 890,
-        year: 2023,
-        mileageKm: 6400,
-        priceHuf: '4 490 000 Ft',
-        image: '/img/moto-1.png',
-        status: 'Újszerű állapot',
-        badgeColor: 'teal',
-    },
-    {
-        id: '2',
-        title: 'Ducati Panigale V4 S',
-        brand: 'Ducati',
-        design: 'Sport',
-        designLabel: 'Sport / Supersport',
-        powerKw: 158,
-        powerHp: 215,
-        engineCc: 1103,
-        year: 2023,
-        mileageKm: 3200,
-        priceHuf: '8 890 000 Ft',
-        image: '/img/moto-4.png',
-        status: 'Azonnal vihető',
-        badgeColor: 'coral',
-    },
-    {
-        id: '3',
-        title: 'BMW R 1250 GS Adventure Triple Black',
-        brand: 'BMW',
-        design: 'Touring',
-        designLabel: 'Touring / Adventure',
-        powerKw: 100,
-        powerHp: 136,
-        engineCc: 1254,
-        year: 2022,
-        mileageKm: 14800,
-        priceHuf: '7 190 000 Ft',
-        image: '/img/moto-3.png',
-        status: 'Azonnal vihető',
-        badgeColor: 'teal',
-    },
-    {
-        id: '4',
-        title: 'Honda CBR 650R ABS E-Clutch',
-        brand: 'Honda',
-        design: 'Sport',
-        designLabel: 'Sport / Supersport',
-        powerKw: 70,
-        powerHp: 95,
-        engineCc: 649,
-        year: 2023,
-        mileageKm: 4100,
-        priceHuf: '3 690 000 Ft',
-        image: '/img/moto-2.png',
-        status: 'Foglalható',
-        badgeColor: 'gold',
-    },
-    {
-        id: '5',
-        title: 'Kawasaki Ninja 400 KRT Edition',
-        brand: 'Kawasaki',
-        design: 'Sport',
-        designLabel: 'Sport / Supersport',
-        powerKw: 33.4,
-        powerHp: 45,
-        engineCc: 399,
-        year: 2022,
-        mileageKm: 8900,
-        priceHuf: '2 350 000 Ft',
-        image: '/img/moto-1.png',
-        status: 'Azonnal vihető',
-        badgeColor: 'teal',
-    },
-    {
-        id: '6',
-        title: 'KTM 890 Duke R Super Scalpel',
-        brand: 'KTM',
-        design: 'Naked',
-        designLabel: 'Naked / Street',
-        powerKw: 89,
-        powerHp: 121,
-        engineCc: 889,
-        year: 2023,
-        mileageKm: 5200,
-        priceHuf: '4 290 000 Ft',
-        image: '/img/moto-4.png',
-        status: 'Újszerű állapot',
-        badgeColor: 'coral',
-    },
-];
+export interface DBCategory {
+    id: number;
+    name: string;
+    motors_count?: number;
+}
 
 interface MotorcycleFilterSectionProps {
     content?: Record<string, string>;
+    brands?: DBBrand[];
+    categories?: DBCategory[];
+    motors?: MotorData[];
 }
 
-export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProps = {}) {
+export function MotorcycleFilterSection({
+    content,
+    brands = [],
+    categories = [],
+    motors = [],
+}: MotorcycleFilterSectionProps = {}) {
     const [selectedBrand, setSelectedBrand] = useState<string>('all');
-    const [selectedDesign, setSelectedDesign] = useState<string>('all');
+    const [selectedCategory, setSelectedCategory] = useState<string>('all');
     const [selectedPerformance, setSelectedPerformance] = useState<string>('all');
-    const [hasSearched, setHasSearched] = useState<boolean>(false);
-    const resultsRef = useRef<HTMLDivElement>(null);
 
-    // Calculate matching count in real time
+    // Helper to check if bike fits A2 license (<= 35 kW)
+    const isA2Motor = (bike: MotorData) => {
+        const kw = parseFloat(String(bike.performance || ''));
+        return !isNaN(kw) && kw > 0 && kw <= 35;
+    };
+
+    // Total count of A2 bikes in database
+    const a2Count = useMemo(() => {
+        return motors.filter(isA2Motor).length;
+    }, [motors]);
+
+    // Real-time filtered count of matching motorcycles
     const filteredMotorcycles = useMemo(() => {
-        return MOTORCYCLE_INVENTORY.filter((bike) => {
-            // Brand check
-            if (selectedBrand !== 'all' && bike.brand !== selectedBrand) {
+        return motors.filter((bike) => {
+            if (selectedBrand !== 'all' && String(bike.brand_id) !== String(selectedBrand)) {
                 return false;
             }
-            // Design check
-            if (selectedDesign !== 'all' && bike.design !== selectedDesign) {
+            if (selectedCategory !== 'all' && String(bike.category_id) !== String(selectedCategory)) {
                 return false;
             }
-            // Performance check
-            if (selectedPerformance !== 'all') {
-                if (selectedPerformance === 'entry' && bike.powerKw > 35) return false;
-                if (
-                    selectedPerformance === 'mid' &&
-                    (bike.powerKw <= 35 || bike.powerKw > 70)
-                )
-                    return false;
-                if (
-                    selectedPerformance === 'high' &&
-                    (bike.powerKw <= 70 || bike.powerKw > 100)
-                )
-                    return false;
-                if (selectedPerformance === 'extreme' && bike.powerKw < 100) return false;
+            if (selectedPerformance === 'a2') {
+                if (!isA2Motor(bike)) return false;
             }
             return true;
         });
-    }, [selectedBrand, selectedDesign, selectedPerformance]);
+    }, [motors, selectedBrand, selectedCategory, selectedPerformance]);
 
     const isFilterActive =
         selectedBrand !== 'all' ||
-        selectedDesign !== 'all' ||
+        selectedCategory !== 'all' ||
         selectedPerformance !== 'all';
 
     const handleReset = () => {
         setSelectedBrand('all');
-        setSelectedDesign('all');
+        setSelectedCategory('all');
         setSelectedPerformance('all');
-        setHasSearched(false);
     };
 
-    const handleSearch = () => {
-        setHasSearched(true);
-        setTimeout(() => {
-            resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-    };
+    // Forward to /motorok catalog page with chosen filters
+    const catalogUrl = useMemo(() => {
+        const params = new URLSearchParams();
+        if (selectedBrand !== 'all') params.set('brand_id', selectedBrand);
+        if (selectedCategory !== 'all') params.set('category_id', selectedCategory);
+        if (selectedPerformance === 'a2') params.set('a2', '1');
+        const qs = params.toString();
+        return qs ? `/motorok?${qs}` : '/motorok';
+    }, [selectedBrand, selectedCategory, selectedPerformance]);
+
+    // Popular brands for quick-select pills
+    const popularBrands = useMemo(() => {
+        return [...brands]
+            .sort((a, b) => (b.motors_count ?? 0) - (a.motors_count ?? 0))
+            .slice(0, 5);
+    }, [brands]);
+
+    // Popular categories for quick-select pills
+    const popularCategories = useMemo(() => {
+        return [...categories]
+            .sort((a, b) => (b.motors_count ?? 0) - (a.motors_count ?? 0))
+            .slice(0, 5);
+    }, [categories]);
 
     return (
         <section
@@ -301,9 +126,8 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                     transition={{ duration: 0.6, ease: 'easeOut' }}
                     className="relative p-6 sm:p-8 lg:p-10"
                 >
-
                     {/* Section header */}
-                    <div className="relative z-10 mx-auto mb-8 max-w-3xl text-center">
+                    <div className="relative z-10 mx-auto mb-6 max-w-3xl text-center">
                         <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
                             {content?.badge ?? 'Járműkereső'}
                         </span>
@@ -315,11 +139,11 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                         </h2> */}
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             {content?.subtitle ??
-                                'Válassz márkát, karosszéria dizájnt és motorteljesítményt az aktuális készletünkből'}
+                                'Válassz márkát, kategóriát és teljesítményt az aktuális készletünkből'}
                         </p>
                     </div>
 
-                    {/* Filter Selectors Grid: 3 columns (Márka, Dizájn, Teljesítmény) */}
+                    {/* Filter Selectors Grid: 3 columns (1. Márka, 2. Kategória, 3. Teljesítmény) */}
                     <div className="relative z-10 grid grid-cols-1 gap-6 md:grid-cols-3">
                         {/* 1. MÁRKA (BRAND) */}
                         <div className="flex flex-col gap-2">
@@ -328,12 +152,12 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                                 className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                             >
                                 {/* <span className="flex items-center gap-1.5">
-                                    <Tag className="h-4 w-4 text-teal" />
+                                    <Tag className="h-3.5 w-3.5 text-teal" />
                                     1. Márka (Gyártó)
                                 </span> */}
-                                {selectedBrand !== 'all' && (
+                                {/* {selectedBrand !== 'all' && (
                                     <span className="text-teal font-bold text-[11px]">Kiválasztva</span>
-                                )}
+                                )} */}
                             </label>
 
                             <Select value={selectedBrand} onValueChange={setSelectedBrand}>
@@ -341,16 +165,27 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                                     id="brand-select"
                                     className="w-full h-auto min-h-[50px] data-[size=default]:h-auto rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus-visible:border-teal focus:outline-none focus-visible:outline-none focus:ring-2 focus-visible:ring-2 focus:ring-teal/20 focus-visible:ring-teal/20 cursor-pointer shadow-xs justify-between [&>svg]:text-muted-foreground [&>svg]:opacity-100"
                                 >
-                                    <SelectValue placeholder="Válassz márkát..." />
+                                    <SelectValue placeholder="Összes márka" />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-border/80 bg-popover/95 backdrop-blur-md p-1.5 shadow-xl max-h-72">
-                                    {BRANDS.map((brand) => (
+                                    <SelectItem
+                                        value="all"
+                                        className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                    >
+                                        Összes márka
+                                    </SelectItem>
+                                    {brands.map((brand) => (
                                         <SelectItem
-                                            key={brand.value}
-                                            value={brand.value}
+                                            key={brand.id}
+                                            value={String(brand.id)}
                                             className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
                                         >
-                                            {brand.label} {brand.value !== 'all' ? `• ${brand.origin}` : ''}
+                                            {brand.name}
+                                            {typeof brand.motors_count === 'number' && (
+                                                <span className="text-muted-foreground text-xs ml-1.5 font-normal">
+                                                    ({brand.motors_count} db)
+                                                </span>
+                                            )}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -358,93 +193,105 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
 
                             {/* Popular brand quick pills */}
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                {['Honda', 'Yamaha', 'BMW', 'Ducati', 'KTM'].map((brand) => (
-                                    <button
-                                        key={brand}
-                                        type="button"
-                                        onClick={() => setSelectedBrand(selectedBrand === brand ? 'all' : brand)}
-                                        className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all cursor-pointer ${selectedBrand === brand
-                                            ? 'bg-teal text-white shadow-xs'
-                                            : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
-                                            }`}
-                                    >
-                                        {brand}
-                                    </button>
-                                ))}
+                                {popularBrands.map((brand) => {
+                                    const isSelected = selectedBrand === String(brand.id);
+                                    return (
+                                        <button
+                                            key={brand.id}
+                                            type="button"
+                                            onClick={() => setSelectedBrand(isSelected ? 'all' : String(brand.id))}
+                                            className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all cursor-pointer ${isSelected
+                                                ? 'bg-teal text-white shadow-xs'
+                                                : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+                                                }`}
+                                        >
+                                            {brand.name}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        {/* 2. DIZÁJN & STÍLUS (DESIGN / STYLE) */}
+                        {/* 2. KATEGÓRIA (CATEGORY / VID) */}
                         <div className="flex flex-col gap-2">
                             <label
-                                htmlFor="design-select"
+                                htmlFor="category-select"
                                 className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                             >
                                 {/* <span className="flex items-center gap-1.5">
-                                    <Sparkles className="h-4 w-4 text-teal" />
-                                    2. Dizájn & Karosszéria
+                                    <Sparkles className="h-3.5 w-3.5 text-teal" />
+                                    2. Kategória (Kivitel / Stílus)
                                 </span> */}
-                                {selectedDesign !== 'all' && (
+                                {/* {selectedCategory !== 'all' && (
                                     <span className="text-teal font-bold text-[11px]">Kiválasztva</span>
-                                )}
+                                )} */}
                             </label>
 
-                            <Select value={selectedDesign} onValueChange={setSelectedDesign}>
+                            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                                 <SelectTrigger
-                                    id="design-select"
+                                    id="category-select"
                                     className="w-full h-auto min-h-[50px] data-[size=default]:h-auto rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus-visible:border-teal focus:outline-none focus-visible:outline-none focus:ring-2 focus-visible:ring-2 focus:ring-teal/20 focus-visible:ring-teal/20 cursor-pointer shadow-xs justify-between [&>svg]:text-muted-foreground [&>svg]:opacity-100"
                                 >
-                                    <SelectValue placeholder="Válassz dizájnt..." />
+                                    <SelectValue placeholder="Összes kategória" />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-border/80 bg-popover/95 backdrop-blur-md p-1.5 shadow-xl max-h-72">
-                                    {DESIGNS.map((d) => (
+                                    <SelectItem
+                                        value="all"
+                                        className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                    >
+                                        Összes kategória
+                                    </SelectItem>
+                                    {categories.map((c) => (
                                         <SelectItem
-                                            key={d.value}
-                                            value={d.value}
+                                            key={c.id}
+                                            value={String(c.id)}
                                             className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
                                         >
-                                            {d.label}
+                                            {c.name}
+                                            {typeof c.motors_count === 'number' && (
+                                                <span className="text-muted-foreground text-xs ml-1.5 font-normal">
+                                                    ({c.motors_count} db)
+                                                </span>
+                                            )}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
 
-                            {/* Popular styles quick pills */}
+                            {/* Popular category quick pills */}
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                {[
-                                    { id: 'Sport', short: 'Sport' },
-                                    { id: 'Naked', short: 'Naked' },
-                                    { id: 'Touring', short: 'Túra / Adventure' },
-                                    { id: 'Cruiser', short: 'Cruiser' },
-                                ].map((item) => (
-                                    <button
-                                        key={item.id}
-                                        type="button"
-                                        onClick={() => setSelectedDesign(selectedDesign === item.id ? 'all' : item.id)}
-                                        className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all cursor-pointer ${selectedDesign === item.id
-                                            ? 'bg-teal text-white shadow-xs'
-                                            : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
-                                            }`}
-                                    >
-                                        {item.short}
-                                    </button>
-                                ))}
+                                {popularCategories.map((c) => {
+                                    const isSelected = selectedCategory === String(c.id);
+                                    return (
+                                        <button
+                                            key={c.id}
+                                            type="button"
+                                            onClick={() => setSelectedCategory(isSelected ? 'all' : String(c.id))}
+                                            className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all cursor-pointer ${isSelected
+                                                ? 'bg-teal text-white shadow-xs'
+                                                : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+                                                }`}
+                                        >
+                                            {c.name}
+                                        </button>
+                                    );
+                                })}
                             </div>
                         </div>
 
-                        {/* 3. TELJESÍTMÉNY (PERFORMANCE / POWER) */}
+                        {/* 3. TELJESÍTMÉNY (PERFORMANCE) - ONLY A2 OPTION */}
                         <div className="flex flex-col gap-2">
                             <label
                                 htmlFor="performance-select"
                                 className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                             >
                                 {/* <span className="flex items-center gap-1.5">
-                                    <Gauge className="h-4 w-4 text-teal" />
-                                    3. Teljesítmény & Erő
+                                    <Gauge className="h-3.5 w-3.5 text-teal" />
+                                    3. Teljesítmény
                                 </span> */}
-                                {selectedPerformance !== 'all' && (
+                                {/* {selectedPerformance !== 'all' && (
                                     <span className="text-teal font-bold text-[11px]">Kiválasztva</span>
-                                )}
+                                )} */}
                             </label>
 
                             <Select value={selectedPerformance} onValueChange={setSelectedPerformance}>
@@ -452,189 +299,66 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                                     id="performance-select"
                                     className="w-full h-auto min-h-[50px] data-[size=default]:h-auto rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus-visible:border-teal focus:outline-none focus-visible:outline-none focus:ring-2 focus-visible:ring-2 focus:ring-teal/20 focus-visible:ring-teal/20 cursor-pointer shadow-xs justify-between [&>svg]:text-muted-foreground [&>svg]:opacity-100"
                                 >
-                                    <SelectValue placeholder="Válassz teljesítményt..." />
+                                    <SelectValue placeholder="Összes teljesítmény" />
                                 </SelectTrigger>
                                 <SelectContent className="rounded-2xl border-border/80 bg-popover/95 backdrop-blur-md p-1.5 shadow-xl max-h-72">
-                                    {PERFORMANCES.map((p) => (
-                                        <SelectItem
-                                            key={p.value}
-                                            value={p.value}
-                                            className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
-                                        >
-                                            {p.label} {p.value !== 'all' ? `(${p.range})` : ''}
-                                        </SelectItem>
-                                    ))}
+                                    <SelectItem
+                                        value="all"
+                                        className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                    >
+                                        Összes teljesítmény
+                                    </SelectItem>
+                                    <SelectItem
+                                        value="a2"
+                                        className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                    >
+                                        A2-es kategória (35 kW-ig)
+                                        {a2Count > 0 && (
+                                            <span className="text-muted-foreground text-xs ml-1.5 font-normal">
+                                                ({a2Count} db)
+                                            </span>
+                                        )}
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
 
-                            {/* Performance quick brackets */}
+                            {/* A2 quick pill */}
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                {[
-                                    { id: 'entry', short: 'A2 (≤ 35 kW)' },
-                                    { id: 'mid', short: '35–70 kW' },
-                                    { id: 'high', short: '70–100 kW' },
-                                    { id: 'extreme', short: '100+ kW' },
-                                ].map((item) => (
-                                    <button
-                                        key={item.id}
-                                        type="button"
-                                        onClick={() =>
-                                            setSelectedPerformance(selectedPerformance === item.id ? 'all' : item.id)
-                                        }
-                                        className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all cursor-pointer ${selectedPerformance === item.id
-                                            ? 'bg-teal text-white shadow-xs'
-                                            : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
-                                            }`}
-                                    >
-                                        {item.short}
-                                    </button>
-                                ))}
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedPerformance(selectedPerformance === 'a2' ? 'all' : 'a2')}
+                                    className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-all cursor-pointer ${selectedPerformance === 'a2'
+                                        ? 'bg-teal text-white shadow-xs'
+                                        : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+                                        }`}
+                                >
+                                    A2-es kategória (35 kW-ig) {a2Count > 0 ? `(${a2Count})` : ''}
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    {/* Active Selected Tags Summary */}
-                    {isFilterActive && (
-                        <div className="mt-6 flex flex-wrap items-center gap-2 border-t border-border/50 pt-4">
-                            <span className="text-xs font-medium text-muted-foreground">Kiválasztott feltételek:</span>
-                            {selectedBrand !== 'all' && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-teal/15 text-teal border border-teal/30 px-3 py-1 text-xs font-medium">
-                                    Márka: {selectedBrand}
-                                    <button
-                                        onClick={() => setSelectedBrand('all')}
-                                        className="ml-1 hover:text-foreground cursor-pointer"
-                                        aria-label="Remove brand filter"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            )}
-                            {selectedDesign !== 'all' && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-teal/15 text-teal border border-teal/30 px-3 py-1 text-xs font-medium">
-                                    Dizájn: {DESIGNS.find((d) => d.value === selectedDesign)?.label}
-                                    <button
-                                        onClick={() => setSelectedDesign('all')}
-                                        className="ml-1 hover:text-foreground cursor-pointer"
-                                        aria-label="Remove design filter"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            )}
-                            {selectedPerformance !== 'all' && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-teal/15 text-teal border border-teal/30 px-3 py-1 text-xs font-medium">
-                                    Erő: {PERFORMANCES.find((p) => p.value === selectedPerformance)?.label}
-                                    <button
-                                        onClick={() => setSelectedPerformance('all')}
-                                        className="ml-1 hover:text-foreground cursor-pointer"
-                                        aria-label="Remove performance filter"
-                                    >
-                                        ×
-                                    </button>
-                                </span>
-                            )}
 
-                            {/* Reset action button */}
-                            <button
-                                type="button"
-                                onClick={handleReset}
-                                className="inline-flex items-center gap-1.5 rounded-full bg-muted/80 hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer px-3 py-1 text-xs font-medium border border-border/50"
-                            >
-                                <RotateCcw className="h-3 w-3" />
-                                Szűrők törlése
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Bottom Action Area: Centered Search Button */}
+                    {/* Bottom Action Area: Only 1 black button with Search icon */}
                     <div className="relative z-10 mt-8 flex justify-center pt-3">
                         <Button
-                            type="button"
+                            asChild
                             size="lg"
-                            onClick={handleSearch}
-                            className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 w-full sm:w-auto min-w-[260px] cursor-pointer px-8 shadow-lg transition-all hover:shadow-xl"
+                            className="bg-foreground text-background hover:bg-foreground/90 group shadow-foreground/10 hover:shadow-foreground/15 w-full sm:w-auto min-w-auto cursor-pointer px-8 shadow-lg transition-all hover:shadow-xl"
                         >
-                            <span className="relative z-10 flex items-center justify-center gap-2.5">
-                                <Search className="h-4 w-4 transition-transform group-hover:scale-110" />
-                                <span>Keresés indítása</span>
-                                {/* <span className="ml-1 rounded-full bg-background/20 px-2 py-0.5 text-xs font-bold text-background">
-                                    {filteredMotorcycles.length} db
-                                </span> */}
-                                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                            </span>
+                            <Link href={catalogUrl}>
+                                <span className="relative z-10 flex items-center justify-center gap-2.5">
+                                    {/* <Search className="h-4 w-4 transition-transform group-hover:scale-110" /> */}
+                                    <span>Keresés</span>
+                                    {/* <span className="ml-1 rounded-full bg-background/20 px-2 py-0.5 text-xs font-bold text-background">
+                                        {filteredMotorcycles.length} db
+                                    </span> */}
+                                    <ArrowRight className="ml-3 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                </span>
+                            </Link>
                         </Button>
                     </div>
                 </motion.div>
-
-                {/* Interactive Results Section Displayed on Search or Filter Selection */}
-                <div ref={resultsRef} className="mt-10">
-                    <AnimatePresence>
-                        {hasSearched && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 25 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: 25 }}
-                                transition={{ duration: 0.5 }}
-                                className="space-y-6"
-                            >
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-border pb-4">
-                                    <div>
-                                        <h3 className="text-xl font-bold text-foreground">
-                                            Találatok a keresésed alapján
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground">
-                                            {filteredMotorcycles.length > 0
-                                                ? `${filteredMotorcycles.length} ellenőrzött jármű található azonnali készletünkön`
-                                                : 'Sajnos a megadott feltételekkel nem találtunk járművet, próbálj tágabb szűrést!'}
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            onClick={handleReset}
-                                            className="text-xs cursor-pointer"
-                                        >
-                                            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-                                            Összes mutatása
-                                        </Button>
-                                    </div>
-                                </div>
-
-                                {filteredMotorcycles.length === 0 ? (
-                                    <div className="rounded-2xl border border-dashed border-border/80 p-12 text-center">
-                                        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-                                            <Search className="h-7 w-7" />
-                                        </div>
-                                        <h4 className="text-lg font-semibold text-foreground">Nincs pontos egyezés</h4>
-                                        <p className="mt-1 max-w-md mx-auto text-sm text-muted-foreground">
-                                            Próbálj más márkát vagy teljesítménykategóriát választani, vagy érdeklődj
-                                            személyesen hamarosan érkező készletünkről!
-                                        </p>
-                                        <Button
-                                            onClick={handleReset}
-                                            variant="outline"
-                                            className="mt-5 cursor-pointer"
-                                        >
-                                            Szűrők alaphelyzetbe állítása
-                                        </Button>
-                                    </div>
-                                ) : (
-                                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                        {filteredMotorcycles.map((bike, index) => (
-                                            <MotorcycleCard
-                                                key={bike.id}
-                                                motorcycle={bike}
-                                                layout
-                                                delay={index * 0.05}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
             </div>
         </section>
     );

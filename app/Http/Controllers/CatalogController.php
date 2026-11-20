@@ -20,6 +20,7 @@ class CatalogController extends Controller
             'search',
             'brand_id',
             'category_id',
+            'a2',
             'min_price',
             'max_price',
             'min_year',

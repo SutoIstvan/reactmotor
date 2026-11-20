@@ -147,7 +147,17 @@
         @apply border-border;
     }
 
+    html {
+        scrollbar-gutter: stable;
+    }
+
     body {
         @apply bg-background text-foreground;
+    }
+
+    body[data-scroll-locked]:has([data-slot="select-content"]):not(:has([data-slot="dialog-content"])) {
+        overflow: auto !important;
+        margin-right: 0 !important;
+        padding-right: 0 !important;
     }
 }

@@ -95,23 +95,29 @@ function FeatureCard({
             transition={{ duration: 0.6, delay: index * 0.1 }}
             className={`group bg-card border-border relative rounded-2xl border p-6 ${colors.hoverBorder} transition-all duration-300 hover:shadow-xl ${colors.glow}`}
         >
-            {/* Icon */}
-            <div
-                className={`h-12 w-12 rounded-xl ${colors.bg} ${colors.text} mb-4 flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
-            >
-                <feature.icon className="h-6 w-6" />
+            {/* Icon + Content */}
+            <div className="mb-4 flex items-center gap-4">
+                <div
+                    className={`h-12 w-12 shrink-0 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}
+                >
+                    <feature.icon className="h-6 w-6" />
+                </div>
+
+                <h3 className="text-foreground text-lg font-semibold">
+                    {feature.title}
+                </h3>
             </div>
 
             {/* Content */}
-            <h3 className="text-foreground mb-2 text-xl font-semibold">
+            {/* <h3 className="text-foreground mb-2 text-xl font-semibold">
                 {feature.title}
-            </h3>
+            </h3> */}
             <p className="text-muted-foreground mb-4 leading-relaxed">
                 {feature.description}
             </p>
 
             {/* Stat */}
-            <div
+            {/* <div
                 className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 ${colors.bg} ${colors.border} border`}
             >
                 <span className={`text-sm font-bold ${colors.text}`}>
@@ -120,7 +126,7 @@ function FeatureCard({
                 <span className="text-muted-foreground text-xs">
                     {feature.statLabel}
                 </span>
-            </div>
+            </div> */}
 
             {/* Hover glow effect */}
             <div
