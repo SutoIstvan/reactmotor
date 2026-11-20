@@ -7,12 +7,18 @@ import {
     RotateCcw,
     Gauge,
     Sparkles,
-    ChevronDown,
     ArrowRight,
     ArrowUpRight,
     Tag,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import { MotorcycleCard } from '@/components/motorcycles/motorcycle-card';
 
 // Brands available for filtering
@@ -297,16 +303,16 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                 >
 
                     {/* Section header */}
-                    <div className="relative z-10 mx-auto mb-12 max-w-3xl text-center">
+                    <div className="relative z-10 mx-auto mb-8 max-w-3xl text-center">
                         <span className="bg-muted text-muted-foreground mb-4 inline-block rounded-full px-4 py-1.5 text-sm font-medium">
                             {content?.badge ?? 'Járműkereső'}
                         </span>
-                        <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
+                        {/* <h2 className="text-foreground mb-6 text-3xl font-bold text-balance md:text-4xl lg:text-5xl">
                             {content?.title ?? 'Találd meg a stílusodhoz'}{' '}
                             <span className="text-teal">
                                 {content?.title_highlight ?? 'illő motort'}
                             </span>
-                        </h2>
+                        </h2> */}
                         <p className="text-muted-foreground text-lg leading-relaxed">
                             {content?.subtitle ??
                                 'Válassz márkát, karosszéria dizájnt és motorteljesítményt az aktuális készletünkből'}
@@ -321,30 +327,34 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                                 htmlFor="brand-select"
                                 className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                             >
-                                <span className="flex items-center gap-1.5">
+                                {/* <span className="flex items-center gap-1.5">
                                     <Tag className="h-4 w-4 text-teal" />
                                     1. Márka (Gyártó)
-                                </span>
+                                </span> */}
                                 {selectedBrand !== 'all' && (
                                     <span className="text-teal font-bold text-[11px]">Kiválasztva</span>
                                 )}
                             </label>
 
-                            <div className="relative">
-                                <select
+                            <Select value={selectedBrand} onValueChange={setSelectedBrand}>
+                                <SelectTrigger
                                     id="brand-select"
-                                    value={selectedBrand}
-                                    onChange={(e) => setSelectedBrand(e.target.value)}
-                                    className="w-full appearance-none rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 pr-10 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20 cursor-pointer shadow-xs"
+                                    className="w-full h-auto min-h-[50px] data-[size=default]:h-auto rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus-visible:border-teal focus:outline-none focus-visible:outline-none focus:ring-2 focus-visible:ring-2 focus:ring-teal/20 focus-visible:ring-teal/20 cursor-pointer shadow-xs justify-between [&>svg]:text-muted-foreground [&>svg]:opacity-100"
                                 >
+                                    <SelectValue placeholder="Válassz márkát..." />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-2xl border-border/80 bg-popover/95 backdrop-blur-md p-1.5 shadow-xl max-h-72">
                                     {BRANDS.map((brand) => (
-                                        <option key={brand.value} value={brand.value} className="bg-card text-foreground py-1">
+                                        <SelectItem
+                                            key={brand.value}
+                                            value={brand.value}
+                                            className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                        >
                                             {brand.label} {brand.value !== 'all' ? `• ${brand.origin}` : ''}
-                                        </option>
+                                        </SelectItem>
                                     ))}
-                                </select>
-                                <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            </div>
+                                </SelectContent>
+                            </Select>
 
                             {/* Popular brand quick pills */}
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -370,30 +380,34 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                                 htmlFor="design-select"
                                 className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                             >
-                                <span className="flex items-center gap-1.5">
+                                {/* <span className="flex items-center gap-1.5">
                                     <Sparkles className="h-4 w-4 text-teal" />
                                     2. Dizájn & Karosszéria
-                                </span>
+                                </span> */}
                                 {selectedDesign !== 'all' && (
                                     <span className="text-teal font-bold text-[11px]">Kiválasztva</span>
                                 )}
                             </label>
 
-                            <div className="relative">
-                                <select
+                            <Select value={selectedDesign} onValueChange={setSelectedDesign}>
+                                <SelectTrigger
                                     id="design-select"
-                                    value={selectedDesign}
-                                    onChange={(e) => setSelectedDesign(e.target.value)}
-                                    className="w-full appearance-none rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 pr-10 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20 cursor-pointer shadow-xs"
+                                    className="w-full h-auto min-h-[50px] data-[size=default]:h-auto rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus-visible:border-teal focus:outline-none focus-visible:outline-none focus:ring-2 focus-visible:ring-2 focus:ring-teal/20 focus-visible:ring-teal/20 cursor-pointer shadow-xs justify-between [&>svg]:text-muted-foreground [&>svg]:opacity-100"
                                 >
+                                    <SelectValue placeholder="Válassz dizájnt..." />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-2xl border-border/80 bg-popover/95 backdrop-blur-md p-1.5 shadow-xl max-h-72">
                                     {DESIGNS.map((d) => (
-                                        <option key={d.value} value={d.value} className="bg-card text-foreground py-1">
+                                        <SelectItem
+                                            key={d.value}
+                                            value={d.value}
+                                            className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                        >
                                             {d.label}
-                                        </option>
+                                        </SelectItem>
                                     ))}
-                                </select>
-                                <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            </div>
+                                </SelectContent>
+                            </Select>
 
                             {/* Popular styles quick pills */}
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -424,30 +438,34 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                                 htmlFor="performance-select"
                                 className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground"
                             >
-                                <span className="flex items-center gap-1.5">
+                                {/* <span className="flex items-center gap-1.5">
                                     <Gauge className="h-4 w-4 text-teal" />
                                     3. Teljesítmény & Erő
-                                </span>
+                                </span> */}
                                 {selectedPerformance !== 'all' && (
                                     <span className="text-teal font-bold text-[11px]">Kiválasztva</span>
                                 )}
                             </label>
 
-                            <div className="relative">
-                                <select
+                            <Select value={selectedPerformance} onValueChange={setSelectedPerformance}>
+                                <SelectTrigger
                                     id="performance-select"
-                                    value={selectedPerformance}
-                                    onChange={(e) => setSelectedPerformance(e.target.value)}
-                                    className="w-full appearance-none rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 pr-10 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/20 cursor-pointer shadow-xs"
+                                    className="w-full h-auto min-h-[50px] data-[size=default]:h-auto rounded-2xl border border-border/80 bg-background/80 px-4 py-3.5 text-sm font-medium text-foreground transition-all hover:border-teal/50 focus:border-teal focus-visible:border-teal focus:outline-none focus-visible:outline-none focus:ring-2 focus-visible:ring-2 focus:ring-teal/20 focus-visible:ring-teal/20 cursor-pointer shadow-xs justify-between [&>svg]:text-muted-foreground [&>svg]:opacity-100"
                                 >
+                                    <SelectValue placeholder="Válassz teljesítményt..." />
+                                </SelectTrigger>
+                                <SelectContent className="rounded-2xl border-border/80 bg-popover/95 backdrop-blur-md p-1.5 shadow-xl max-h-72">
                                     {PERFORMANCES.map((p) => (
-                                        <option key={p.value} value={p.value} className="bg-card text-foreground py-1">
+                                        <SelectItem
+                                            key={p.value}
+                                            value={p.value}
+                                            className="rounded-xl py-2.5 pl-3 pr-8 text-sm cursor-pointer focus:bg-teal/10 focus:text-teal font-medium"
+                                        >
                                             {p.label} {p.value !== 'all' ? `(${p.range})` : ''}
-                                        </option>
+                                        </SelectItem>
                                     ))}
-                                </select>
-                                <ChevronDown className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            </div>
+                                </SelectContent>
+                            </Select>
 
                             {/* Performance quick brackets */}
                             <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -539,9 +557,9 @@ export function MotorcycleFilterSection({ content }: MotorcycleFilterSectionProp
                             <span className="relative z-10 flex items-center justify-center gap-2.5">
                                 <Search className="h-4 w-4 transition-transform group-hover:scale-110" />
                                 <span>Keresés indítása</span>
-                                <span className="ml-1 rounded-full bg-background/20 px-2 py-0.5 text-xs font-bold text-background">
+                                {/* <span className="ml-1 rounded-full bg-background/20 px-2 py-0.5 text-xs font-bold text-background">
                                     {filteredMotorcycles.length} db
-                                </span>
+                                </span> */}
                                 <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </span>
                         </Button>

@@ -232,8 +232,8 @@ export function TestimonialsSection({
                     <InfiniteSlider
                         className="w-full"
                         direction="vertical"
-                        speed={30}
-                        speedOnHover={15}
+                        speed={22}
+                        speedOnHover={11}
                     >
                         {firstColumn.map((testimonial) => (
                             <TestimonialsCard
@@ -245,8 +245,8 @@ export function TestimonialsSection({
                     <InfiniteSlider
                         className="hidden w-full md:block"
                         direction="vertical"
-                        speed={48}
-                        speedOnHover={24}
+                        speed={36}
+                        speedOnHover={18}
                     >
                         {secondColumn.map((testimonial) => (
                             <TestimonialsCard
@@ -258,8 +258,8 @@ export function TestimonialsSection({
                     <InfiniteSlider
                         className="hidden w-full lg:block"
                         direction="vertical"
-                        speed={36}
-                        speedOnHover={18}
+                        speed={26}
+                        speedOnHover={13}
                     >
                         {thirdColumn.map((testimonial) => (
                             <TestimonialsCard
@@ -271,8 +271,8 @@ export function TestimonialsSection({
                     <InfiniteSlider
                         className="hidden w-full lg:block"
                         direction="vertical"
-                        speed={42}
-                        speedOnHover={21}
+                        speed={30}
+                        speedOnHover={15}
                     >
                         {fourthColumn.map((testimonial) => (
                             <TestimonialsCard
@@ -298,7 +298,7 @@ function TestimonialsCard({
     return (
         <figure
             className={cn(
-                'group border-border bg-card hover:border-teal/30 dark:bg-card/40 relative w-full rounded-2xl border p-6 shadow-xs transition-all duration-300 hover:shadow-xl',
+                'group border-border bg-card hover:border-teal/30 dark:bg-card/40 relative w-full rounded-2xl border p-6 shadow-xs transition-all duration-300 hover:shadow-md',
                 className,
             )}
             {...props}
