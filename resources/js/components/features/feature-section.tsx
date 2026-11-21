@@ -2,46 +2,7 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Zap, Shield, LineChart, Layers, Globe, Lock } from 'lucide-react';
-
-const features = [
-    {
-        icon: Zap,
-        title: 'Hitel és biztosítás',
-        description:
-            'Process millions of events per second with sub-millisecond latency. Built for scale from day one.',
-        color: 'teal',
-        stat: '< 10ms',
-        statLabel: 'avg latency',
-    },
-    {
-        icon: Shield,
-        title: 'Átírás lebonyolítás',
-        description:
-            'SOC 2 Type II certified with end-to-end encryption. Your data stays protected at every layer.',
-        color: 'teal',
-        stat: 'SOC 2',
-        statLabel: 'certified',
-    },
-    {
-        icon: LineChart,
-        title: 'Teljes körű szerviz szolgáltatás',
-        description:
-            'ML-powered insights automatically surface patterns and anomalies in your data streams.',
-        color: 'teal',
-        stat: '40%',
-        statLabel: 'faster insights',
-    },
-    {
-        icon: Layers,
-        title: 'Műszaki és eredetiség vizsga',
-        description:
-            'Connect to 200+ data sources with pre-built connectors. No complex ETL required.',
-        color: 'teal',
-        stat: '200+',
-        statLabel: 'integrations',
-    },
-];
+import { CreditCard, FileSignature, Wrench, ShieldCheck } from 'lucide-react';
 
 const colorClasses = {
     teal: {
@@ -68,7 +29,7 @@ const colorClasses = {
 };
 
 interface FeatureItem {
-    icon: typeof Zap;
+    icon: typeof CreditCard;
     title: string;
     description: string;
     color: string;
@@ -146,7 +107,7 @@ export function FeatureSection({ content }: FeatureSectionProps = {}) {
 
     const featureItems: FeatureItem[] = [
         {
-            icon: Zap,
+            icon: CreditCard,
             title: content?.feature_1_title ?? 'Hitel és biztosítás',
             description:
                 content?.feature_1_description ??
@@ -156,7 +117,7 @@ export function FeatureSection({ content }: FeatureSectionProps = {}) {
             statLabel: 'elérhető',
         },
         {
-            icon: Shield,
+            icon: FileSignature,
             title: content?.feature_2_title ?? 'Átírás lebonyolítás',
             description:
                 content?.feature_2_description ??
@@ -166,7 +127,7 @@ export function FeatureSection({ content }: FeatureSectionProps = {}) {
             statLabel: 'ügyintézés',
         },
         {
-            icon: LineChart,
+            icon: Wrench,
             title: content?.feature_3_title ?? 'Teljes körű szerviz szolgáltatás',
             description:
                 content?.feature_3_description ??
@@ -176,7 +137,7 @@ export function FeatureSection({ content }: FeatureSectionProps = {}) {
             statLabel: 'tapasztalat',
         },
         {
-            icon: Layers,
+            icon: ShieldCheck,
             title: content?.feature_4_title ?? 'Műszaki és eredetiség vizsga',
             description:
                 content?.feature_4_description ??

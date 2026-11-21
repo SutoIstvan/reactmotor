@@ -434,7 +434,7 @@ export default function Motorok({
                             LEFT SIDEBAR: Filters (Desktop)
                         ──────────────────────────────────────────────────────── */}
                         <aside className="hidden lg:block lg:col-span-1 sticky top-28 space-y-6 rounded-2xl backdrop-blur-md p-2">
-                            <div className="flex items-center justify-between border-b border-border/60 pb-4">
+                            <div className="flex items-center justify-between mt-4 pb-4">
                                 <div className="flex items-center gap-2">
                                     <SlidersHorizontal className="h-4 w-4 text-teal" />
                                     <h2 className="text-base font-bold text-foreground">Szűrők</h2>
@@ -452,7 +452,7 @@ export default function Motorok({
                             </div>
 
                             {/* Search Filter */}
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                     Keresés modellre
                                 </Label>
@@ -479,7 +479,7 @@ export default function Motorok({
                                         </button>
                                     )}
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Brand Filter */}
                             <div className="space-y-3">
@@ -501,7 +501,7 @@ export default function Motorok({
                                     )}
                                 </div>
 
-                                {brands.length > 7 && (
+                                {/* {brands.length > 7 && (
                                     <Input
                                         type="text"
                                         placeholder="Márka keresése..."
@@ -509,9 +509,9 @@ export default function Motorok({
                                         onChange={(e) => setBrandSearch(e.target.value)}
                                         className="h-8 text-xs bg-background/50"
                                     />
-                                )}
+                                )} */}
 
-                                <div className="max-h-48 overflow-y-auto space-y-1 pr-1 scrollbar-thin">
+                                <div className="overflow-y-auto space-y-1 pr-1 scrollbar-thin">
                                     <button
                                         type="button"
                                         onClick={() => {
@@ -537,7 +537,7 @@ export default function Motorok({
                                                     setBrandId(next);
                                                     applyFilters({ brand_id: next });
                                                 }}
-                                                className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors text-left cursor-pointer ${isSelected
+                                                className={`w-full flex items-center justify-between px-2.5 py-1 rounded-lg text-xs font-medium transition-colors text-left cursor-pointer ${isSelected
                                                     ? 'bg-teal/15 text-teal font-semibold'
                                                     : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                                                     }`}
@@ -574,7 +574,7 @@ export default function Motorok({
                                     )}
                                 </div>
 
-                                <div className="max-h-44 overflow-y-auto space-y-1 pr-1 scrollbar-thin">
+                                <div className="overflow-y-auto space-y-1 pr-1 scrollbar-thin">
                                     <button
                                         type="button"
                                         onClick={() => {
