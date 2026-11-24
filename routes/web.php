@@ -39,6 +39,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/motorok', [CatalogController::class, 'index'])->name('motorok');
+Route::get('/motorok/{id}', [CatalogController::class, 'show'])->name('motorok.show')->where('id', '[0-9]+');
 
 Route::get('/bemutatkozas', function () {
     return Inertia::render('bemutatkozas', [

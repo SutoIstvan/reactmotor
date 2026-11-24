@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Gauge, Calendar, Navigation, Eye } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
@@ -323,11 +324,10 @@ export function CatalogMotorCard({ motor, onQuickView, layout = 'grid', priority
                             </div>
 
                             <h3
-                                onClick={() => onQuickView?.(motor)}
-                                className="mt-1 text-lg sm:text-xl font-bold text-foreground hover:text-teal transition-colors cursor-pointer"
+                                className="mt-1 text-lg sm:text-xl font-bold text-foreground hover:text-teal transition-colors"
                                 title={motor.name}
                             >
-                                {motor.name}
+                                <Link href={`/motorok/${motor.id}`}>{motor.name}</Link>
                             </h3>
 
                             {(motor.short_description || motor.description) && (
@@ -387,11 +387,13 @@ export function CatalogMotorCard({ motor, onQuickView, layout = 'grid', priority
                             <Button
                                 type="button"
                                 size="sm"
-                                onClick={() => onQuickView?.(motor)}
+                                asChild
                                 className="bg-foreground text-background hover:bg-foreground/90 rounded-xl font-medium text-xs px-4 py-2 cursor-pointer flex items-center gap-1.5 shadow-xs"
                             >
-                                <Eye className="size-3.5" />
-                                <span>Részletek megtekintése</span>
+                                <Link href={`/motorok/${motor.id}`}>
+                                    <Eye className="size-3.5" />
+                                    <span>Részletek megtekintése</span>
+                                </Link>
                             </Button>
                         </div>
                     </div>
@@ -526,11 +528,10 @@ export function CatalogMotorCard({ motor, onQuickView, layout = 'grid', priority
 
                         {/* Model Title */}
                         <h3
-                            onClick={() => onQuickView?.(motor)}
-                            className="mt-1 text-base sm:text-lg font-bold text-foreground line-clamp-1 group-hover:text-teal transition-colors cursor-pointer"
+                            className="mt-1 text-base sm:text-lg font-bold text-foreground line-clamp-1 group-hover:text-teal transition-colors"
                             title={motor.name}
                         >
-                            {motor.name}
+                            <Link href={`/motorok/${motor.id}`}>{motor.name}</Link>
                         </h3>
 
                         {/* Key Specs: Full-width edge-to-edge strip */}
@@ -590,6 +591,17 @@ export function CatalogMotorCard({ motor, onQuickView, layout = 'grid', priority
                                 </>
                             )}
                         </div>
+                        <Button
+                            type="button"
+                            size="sm"
+                            asChild
+                            className="bg-foreground text-background hover:bg-foreground/90 rounded-xl font-medium text-xs px-3 py-2 cursor-pointer flex items-center gap-1.5 shadow-xs"
+                        >
+                            <Link href={`/motorok/${motor.id}`}>
+                                <Eye className="size-3.5" />
+                                <span>Részletek</span>
+                            </Link>
+                        </Button>
                     </div>
                 </div>
             </div>

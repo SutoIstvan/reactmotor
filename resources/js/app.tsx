@@ -13,6 +13,7 @@ const publicPages = [
     'about',
     'bemutatkozas',
     'motorok',
+    'motorok/show',
     'hasznos',
     'felvasarlas',
     'elerhetosegek',
@@ -22,7 +23,7 @@ void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
         switch (true) {
-            case publicPages.includes(name):
+            case publicPages.includes(name) || name.startsWith('motorok/'):
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;

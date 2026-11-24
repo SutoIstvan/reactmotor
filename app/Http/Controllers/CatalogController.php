@@ -14,6 +14,37 @@ class CatalogController extends Controller
     /**
      * Display the public motorcycle catalog with filter and sorting capabilities.
      */
+    /**
+     * Display a single motorcycle detail page.
+     */
+    public function show(int $id): Response
+    {
+        $motor = Motor::withoutTrashed()
+            ->with(['brand', 'category', 'images'])
+            ->findOrFail($id);
+
+        // Related motors: same brand or category, excluding current
+        $related = Motor::withoutTrashed()
+            ->with(['brand', 'category', 'images'])
+            ->where('id', '!=', $id)
+            ->where(function ($q) use ($motor) {
+                $q->where('brand_id', $motor->brand_id)
+                  ->orWhere('category_id', $motor->category_id);
+            })
+            ->orderByDesc('top')
+            ->orderByDesc('id')
+            ->limit(4)
+            ->get();
+
+        return Inertia::render('motorok/show', [
+            'motor'         => $motor,
+            'relatedMotors' => $related,
+        ]);
+    }
+
+    /**
+     * Display the public motorcycle catalog with filter and sorting capabilities.
+     */
     public function index(Request $request): Response
     {
         $rawFilters = array_filter($request->only([
